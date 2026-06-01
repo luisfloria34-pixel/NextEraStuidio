@@ -4,6 +4,7 @@ import {
   Building2,
   BriefcaseBusiness,
   Camera,
+  ExternalLink,
   Globe2,
   Mail,
   MapPinned,
@@ -32,9 +33,34 @@ const services = [
 ]
 
 const projects = [
-  ['Handwerker Website', 'Mehr lokale Anfragen', 'Vorher: alte Website ohne Vertrauen', 'Nachher: klare Seite mit Anfrageformular'],
-  ['Restaurant Auftritt', 'Bessere mobile Ansicht', 'Vorher: Speisekarte schwer lesbar', 'Nachher: mobile Seite mit Maps und Kontakt'],
-  ['Berater Portfolio', 'Premium Personal Brand', 'Vorher: kein klares Angebot', 'Nachher: starker Auftritt mit Cases'],
+  [
+    'Handwerker Website',
+    'Mehr lokale Anfragen',
+    'Vorher: alte Website ohne Vertrauen',
+    'Nachher: klare Seite mit Anfrageformular',
+    'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1200&q=80',
+  ],
+  [
+    'Restaurant Auftritt',
+    'Bessere mobile Ansicht',
+    'Vorher: Speisekarte schwer lesbar',
+    'Nachher: mobile Seite mit Maps und Kontakt',
+    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80',
+  ],
+  [
+    'Berater Portfolio',
+    'Premium Personal Brand',
+    'Vorher: kein klares Angebot',
+    'Nachher: starker Auftritt mit Cases',
+    'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80',
+  ],
+]
+
+const liveSites = [
+  ['Eventmanufaktur Esch', 'Event', 'Premium Events', 'https://www.eventmanufaktur-esch.de/'],
+  ['Höpfi', 'Höpfi', 'Eventmanufaktur', 'https://www.xn--hpfi-0ra.de/'],
+  ['Swyone', 'Swyone', 'Studio System', 'https://swyone.com/'],
+  ['Fuel Radar', 'Fuel Radar', 'SaaS Dashboard', 'https://www.fuel-radar.online/'],
 ]
 
 const steps = [
@@ -70,14 +96,14 @@ function App() {
   const introRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: introRef, offset: ['start start', 'end end'] })
 
-  const introOpacity = useTransform(scrollYProgress, [0, 0.16, 0.24], [1, 1, 0])
-  const headlineOpacity = useTransform(scrollYProgress, [0.2, 0.34, 0.58, 0.68], [0, 1, 1, 0])
+  const introOpacity = useTransform(scrollYProgress, [0, 0.09, 0.14], [1, 1, 0])
+  const headlineOpacity = useTransform(scrollYProgress, [0.19, 0.32, 0.54, 0.63], [0, 1, 1, 0])
   const subOpacity = useTransform(scrollYProgress, [0.62, 0.74, 1], [0, 1, 1])
 
-  const laptopX = useTransform(scrollYProgress, [0, 0.2, 0.44, 0.7, 1], ['0vw', '0vw', '25vw', '25vw', '0vw'])
-  const laptopY = useTransform(scrollYProgress, [0, 0.2, 0.44, 0.72, 1], ['6vh', '0vh', '2vh', '-22vh', '-30vh'])
-  const laptopScale = useTransform(scrollYProgress, [0, 0.22, 0.46, 0.75, 1], [0.54, 1.04, 0.86, 0.78, 0.7])
-  const laptopRotate = useTransform(scrollYProgress, [0, 0.42, 0.72, 1], [0, -11, 9, 0])
+  const laptopX = useTransform(scrollYProgress, [0, 0.18, 0.4, 0.68, 1], ['0vw', '0vw', '33vw', '22vw', '0vw'])
+  const laptopY = useTransform(scrollYProgress, [0, 0.18, 0.4, 0.72, 1], ['8vh', '0vh', '1vh', '-18vh', '-26vh'])
+  const laptopScale = useTransform(scrollYProgress, [0, 0.2, 0.44, 0.75, 1], [0.42, 1.16, 0.78, 0.82, 0.78])
+  const laptopRotate = useTransform(scrollYProgress, [0, 0.4, 0.72, 1], [0, -12, 7, 0])
 
   return (
     <main>
@@ -164,7 +190,7 @@ function App() {
           <h2>So zeigen wir Kunden echte Veränderung.</h2>
         </div>
         <div className="project-grid">
-          {projects.map(([title, tag, before, after], index) => (
+          {projects.map(([title, tag, before, after, image], index) => (
             <motion.article
               key={title}
               initial={{ opacity: 0, y: 28 }}
@@ -172,14 +198,45 @@ function App() {
               viewport={{ once: true, amount: 0.35 }}
               transition={{ delay: index * 0.1 }}
             >
-              <div className="mockup">
-                <div />
+              <div className="mockup" style={{ backgroundImage: `url(${image})` }}>
                 <span>{tag}</span>
               </div>
               <h3>{title}</h3>
               <p>{before}</p>
               <p>{after}</p>
             </motion.article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section live-sites">
+        <div className="section-head">
+          <span>Live Previews</span>
+          <h2>Vier Website-Beispiele direkt verlinkt.</h2>
+        </div>
+        <div className="site-grid">
+          {liveSites.map(([name, mark, label, url], index) => (
+            <motion.a
+              href={url}
+              target="_blank"
+              rel="noreferrer"
+              key={url}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ delay: index * 0.08 }}
+            >
+              <div className="browser-preview">
+                <div className="browser-bar"><i /><i /><i /></div>
+                <div className="site-preview">
+                  <b>{mark}</b>
+                  <small>{label}</small>
+                  <em />
+                </div>
+              </div>
+              <strong>{name}</strong>
+              <span>Preview öffnen <ExternalLink size={15} /></span>
+            </motion.a>
           ))}
         </div>
       </section>
