@@ -313,7 +313,7 @@ form button {
 .proof {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0;
+  gap: 18px;
   padding: clamp(78px, 8vw, 118px) clamp(22px, 6vw, 88px);
   background:
     radial-gradient(circle at 50% 0%, rgba(101, 170, 255, 0.1), transparent 34rem),
@@ -327,6 +327,7 @@ form button {
   justify-content: center;
   padding: clamp(24px, 4vw, 48px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 32px;
   background: rgba(0, 0, 0, 0.34);
 }
 
@@ -364,16 +365,27 @@ form button {
 
 .service-list {
   position: relative;
-  border-top: 1px solid var(--stroke);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
 }
 
 .service-list article {
   display: grid;
-  grid-template-columns: 0.16fr 0.44fr 1fr;
+  grid-template-columns: auto 1fr;
   gap: 24px;
-  align-items: center;
-  padding: 36px 0;
-  border-bottom: 1px solid var(--stroke);
+  align-items: start;
+  min-height: 210px;
+  padding: 28px;
+  border: 1px solid var(--stroke);
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(101, 170, 255, 0.14), transparent 16rem),
+    rgba(255, 255, 255, 0.04);
+}
+
+.service-list article p {
+  grid-column: 2;
 }
 
 .service-list span,
@@ -403,7 +415,7 @@ form button {
   border: 1px solid var(--stroke);
   background: rgba(255, 255, 255, 0.045);
   overflow: hidden;
-  border-radius: 24px;
+  border-radius: 32px;
 }
 
 .image-card {
@@ -607,18 +619,59 @@ form button {
   position: relative;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1px;
-  background: var(--stroke);
+  gap: 18px;
+  background: transparent;
 }
 
 .steps article {
-  min-height: 260px;
-  padding: 24px;
-  background: #050607;
+  position: relative;
+  min-height: 330px;
+  padding: 28px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(101, 170, 255, 0.16), transparent 18rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.026));
+  box-shadow:
+    0 26px 80px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.steps article::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 24px;
+  pointer-events: none;
+}
+
+.steps article::after {
+  content: "";
+  position: absolute;
+  right: 28px;
+  bottom: 28px;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(101, 170, 255, 0.28), transparent 68%);
 }
 
 .steps h3 {
-  margin: 58px 0 14px;
+  margin: 78px 0 14px;
+}
+
+.steps small {
+  position: absolute;
+  top: 26px;
+  right: 26px;
+  padding: 9px 12px;
+  border: 1px solid rgba(101, 170, 255, 0.24);
+  border-radius: 999px;
+  color: rgba(247, 248, 251, 0.76);
+  background: rgba(101, 170, 255, 0.08);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .contact {
@@ -676,6 +729,7 @@ form {
   gap: 14px;
   padding: 26px;
   border: 1px solid var(--stroke);
+  border-radius: 32px;
   background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(20px);
 }
@@ -694,6 +748,7 @@ input,
 textarea {
   width: 100%;
   border: 1px solid var(--stroke);
+  border-radius: 18px;
   background: rgba(0, 0, 0, 0.22);
   color: #fff;
   font: inherit;
@@ -745,6 +800,7 @@ form button {
   }
 
   .proof,
+  .service-list,
   .portfolio-grid,
   .accounts,
   .account-list,
@@ -758,6 +814,10 @@ form button {
   .service-list article {
     grid-template-columns: 1fr;
     gap: 14px;
+  }
+
+  .service-list article p {
+    grid-column: auto;
   }
 }
 

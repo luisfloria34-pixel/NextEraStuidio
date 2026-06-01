@@ -73,10 +73,10 @@ const team = [
 ]
 
 const steps = [
-  ['01', 'Analyse', 'Wir prüfen Website, Angebot und Zielgruppe.'],
-  ['02', 'Preview', 'Du bekommst eine moderne Vorschau.'],
-  ['03', 'Feinschliff', 'Wir verbessern Design, Texte und Kontaktwege.'],
-  ['04', 'Launch', 'Wir veröffentlichen sauber mit Hosting und SEO-Basis.'],
+  ['01', 'Strategie', 'Wir klären Angebot, Zielgruppe und warum Kunden sofort vertrauen sollen.', 'Positionierung'],
+  ['02', 'Konzept', 'Wir bauen Hero, Services, Cases und Kontaktwege als sauberen Verkaufsfluss.', 'Struktur'],
+  ['03', 'Preview', 'Du siehst früh eine hochwertige Version und gibst Feedback direkt am echten Look.', '14 Tage'],
+  ['04', 'Launch', 'Wir veröffentlichen mit Hosting, Pflege und SEO-Basis in einem stabilen System.', 'Live System'],
 ]
 
 function LoadingScreen() {
@@ -299,8 +299,13 @@ function App() {
       <section className="section process">
         <SectionHead eyebrow="Ablauf" title="Einfach aufgebaut. Schnell verstanden." />
         <div className="steps">
-          {steps.map(([number, title, text]) => (
-            <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>
+          {steps.map(([number, title, text, tag], index) => (
+            <motion.article key={number} initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.09 }}>
+              <span>{number}</span>
+              <small>{tag}</small>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </motion.article>
           ))}
         </div>
       </section>
