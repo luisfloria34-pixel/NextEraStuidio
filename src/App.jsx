@@ -107,6 +107,136 @@ function PixelField() {
   return <div className="pixel-field" />
 }
 
+function ParticleCanvas() {
+  const canvasRef = useRef(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const context = canvas.getContext('2d')
+    const palette = ['#4f7fff', '#6ea8fe', '#3a7bd5', '#80d0ff']
+    const mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999 }
+    let width = 0
+    let height = 0
+    let dpr = 1
+    let frame = 0
+    let particles = []
+
+    const createParticles = () => {
+      const count = window.innerWidth <= 768 ? 3000 : 10500
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        bx: Math.random() * width,
+        by: Math.random() * height,
+        vx: 0,
+        vy: 0,
+        phase: Math.random() * Math.PI * 2,
+        speed: 0.35 + Math.random() * 0.75,
+        size: 0.55 + Math.random() * 1.35,
+        color: palette[Math.floor(Math.random() * palette.length)],
+      }))
+    }
+
+    const resize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2)
+      width = window.innerWidth
+      height = window.innerHeight
+      canvas.width = width * dpr
+      canvas.height = height * dpr
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      context.setTransform(dpr, 0, 0, dpr, 0, 0)
+      createParticles()
+    }
+
+    const onMouseMove = (event) => {
+      mouse.tx = event.clientX
+      mouse.ty = event.clientY
+    }
+
+    const onMouseLeave = () => {
+      mouse.tx = -9999
+      mouse.ty = -9999
+    }
+
+    const draw = (time) => {
+      frame = requestAnimationFrame(draw)
+      mouse.x += (mouse.tx - mouse.x) * 0.04
+      mouse.y += (mouse.ty - mouse.y) * 0.04
+      context.clearRect(0, 0, width, height)
+      context.fillStyle = '#0a0d1a'
+      context.fillRect(0, 0, width, height)
+      context.globalCompositeOperation = 'lighter'
+
+      particles.forEach((particle, index) => {
+        const waveX = Math.sin(time * 0.00022 * particle.speed + particle.phase + particle.by * 0.006) * 18
+        const waveY = Math.cos(time * 0.00018 * particle.speed + particle.phase + particle.bx * 0.004) * 14
+        const targetX = particle.bx + waveX
+        const targetY = particle.by + waveY
+        const dx = particle.x - mouse.x
+        const dy = particle.y - mouse.y
+        const distance = Math.hypot(dx, dy)
+
+        if (distance < 80) {
+          const force = (1 - distance / 80) * 0.3
+          particle.vx += (dx / Math.max(distance, 1)) * force * 18
+          particle.vy += (dy / Math.max(distance, 1)) * force * 18
+        }
+
+        particle.vx += (targetX - particle.x) * 0.012
+        particle.vy += (targetY - particle.y) * 0.012
+        particle.vx *= 0.88
+        particle.vy *= 0.88
+        particle.x += particle.vx
+        particle.y += particle.vy
+
+        context.beginPath()
+        context.fillStyle = particle.color
+        context.globalAlpha = 0.22 + Math.sin(time * 0.001 + index) * 0.08
+        context.shadowColor = particle.color
+        context.shadowBlur = 9
+        context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+        context.fill()
+      })
+
+      context.shadowBlur = 0
+      context.lineWidth = 0.45
+      for (let i = 0; i < particles.length; i += 18) {
+        const a = particles[i]
+        for (let j = i + 18; j < Math.min(i + 220, particles.length); j += 36) {
+          const b = particles[j]
+          const distance = Math.hypot(a.x - b.x, a.y - b.y)
+          if (distance < 54) {
+            context.globalAlpha = (1 - distance / 54) * 0.14
+            context.strokeStyle = '#80d0ff'
+            context.beginPath()
+            context.moveTo(a.x, a.y)
+            context.lineTo(b.x, b.y)
+            context.stroke()
+          }
+        }
+      }
+
+      context.globalAlpha = 1
+      context.globalCompositeOperation = 'source-over'
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseleave', onMouseLeave)
+    frame = requestAnimationFrame(draw)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('resize', resize)
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseleave', onMouseLeave)
+    }
+  }, [])
+
+  return <canvas id="particleCanvas" ref={canvasRef} aria-hidden="true" />
+}
+
 function HeroDevice() {
   return (
     <div className="hero-device">
@@ -228,7 +358,7 @@ function App() {
       <AnimatePresence>{loading && <LoadingScreen />}</AnimatePresence>
 
       <nav className="nav-pill">
-        <a className="nav-logo" href="#top">NE</a>
+        <a className="nav-logo" href="#top"><img src="/media/nextera-mark.svg" alt="NextEra Studio" /></a>
         <a href="#work">Arbeit</a>
         <a href="#clients">Kunden</a>
         <a href="#team">Team</a>
@@ -237,7 +367,7 @@ function App() {
 
       <section id="top" className="intro" ref={introRef}>
         <div className="hero-stage">
-          <PixelField />
+          <ParticleCanvas />
           <motion.div className="intro-label" style={{ opacity: introOpacity }}>
             Webagentur für moderne Unternehmen
           </motion.div>
