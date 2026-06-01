@@ -1,5 +1,14 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight, Check, Mail, Phone, Star } from 'lucide-react'
+import {
+  ArrowRight,
+  Building2,
+  BriefcaseBusiness,
+  Camera,
+  Globe2,
+  Mail,
+  MapPinned,
+  Phone,
+} from 'lucide-react'
 import { useRef } from 'react'
 import './App.css'
 
@@ -9,74 +18,66 @@ const links = {
   instagram: 'https://instagram.com/nextera.studio',
 }
 
-const services = [
-  {
-    label: '01',
-    title: 'Website Design',
-    text: 'Wir bauen moderne Websites, die sofort hochwertig wirken und Vertrauen schaffen.',
-  },
-  {
-    label: '02',
-    title: 'Website Umsetzung',
-    text: 'Schnelle, saubere und responsive Seiten für Handy, Tablet und Desktop.',
-  },
-  {
-    label: '03',
-    title: 'Hosting & Pflege',
-    text: 'Wir kümmern uns um Veröffentlichung, Technik, Updates und langfristige Betreuung.',
-  },
-  {
-    label: '04',
-    title: 'SEO & Anfragen',
-    text: 'Klare Struktur, gute Texte und Kontaktwege, damit Besucher zu Kunden werden.',
-  },
-]
-
-const projects = [
-  {
-    title: 'Handwerker Website',
-    tag: 'Mehr lokale Anfragen',
-    before: 'Alte Website ohne Vertrauen',
-    after: 'Klare Startseite mit Anfrageformular',
-  },
-  {
-    title: 'Restaurant Auftritt',
-    tag: 'Bessere mobile Ansicht',
-    before: 'Speisekarte schwer lesbar',
-    after: 'Mobile-first Website mit Google Maps',
-  },
-  {
-    title: 'Berater Portfolio',
-    tag: 'Premium Personal Brand',
-    before: 'Kein klarer Eindruck',
-    after: 'Starker Auftritt mit Cases',
-  },
-]
-
 const stats = [
   ['14 Tage', 'bis erste starke Preview'],
   ['100%', 'responsive Umsetzung'],
-  ['1 System', 'für Website, Hosting und Pflege'],
+  ['1 System', 'Website, Hosting und Pflege'],
+]
+
+const services = [
+  ['Website Design', 'Premium Look, klare Texte und eine Startseite, die sofort Vertrauen schafft.'],
+  ['Website Umsetzung', 'Schnelle, saubere Seiten für Handy, Tablet und Desktop.'],
+  ['Hosting & Pflege', 'Veröffentlichung, Technik, Wartung und laufende Betreuung.'],
+  ['SEO & Anfragen', 'Struktur, Kontaktwege und Inhalte, damit Besucher leichter Kunden werden.'],
+]
+
+const projects = [
+  ['Handwerker Website', 'Mehr lokale Anfragen', 'Vorher: alte Website ohne Vertrauen', 'Nachher: klare Seite mit Anfrageformular'],
+  ['Restaurant Auftritt', 'Bessere mobile Ansicht', 'Vorher: Speisekarte schwer lesbar', 'Nachher: mobile Seite mit Maps und Kontakt'],
+  ['Berater Portfolio', 'Premium Personal Brand', 'Vorher: kein klares Angebot', 'Nachher: starker Auftritt mit Cases'],
 ]
 
 const steps = [
-  'Wir schauen uns deine aktuelle Website an.',
-  'Wir bauen eine moderne Vorschau.',
-  'Du gibst Feedback und Wünsche.',
-  'Wir veröffentlichen sauber und schnell.',
+  ['01', 'Check', 'Wir schauen uns Website, Angebot und Zielgruppe an.'],
+  ['02', 'Preview', 'Du bekommst eine moderne Vorschau statt nur Theorie.'],
+  ['03', 'Feedback', 'Wir verbessern Design, Texte und Kontaktwege.'],
+  ['04', 'Launch', 'Wir veröffentlichen Website, Hosting und Grund-SEO.'],
 ]
 
-const accounts = ['Instagram', 'Google Business', 'LinkedIn', 'Website Portfolio']
+const accounts = [
+  ['Instagram', Camera, 'Content, Portfolio und Kundenvertrauen.'],
+  ['Google Business', MapPinned, 'Lokale Sichtbarkeit und direkte Anfragen.'],
+  ['LinkedIn', BriefcaseBusiness, 'Seriöser Auftritt für B2B-Kunden.'],
+  ['Website Portfolio', Globe2, 'Cases, Services und Kontakt an einem Ort.'],
+]
+
+function Laptop() {
+  return (
+    <div className="laptop">
+      <div className="laptop-lid">
+        <div className="screen-inner">
+          <div className="scanlines" />
+          <div className="screen-mark">Next Era</div>
+        </div>
+      </div>
+      <div className="laptop-hinge" />
+      <div className="laptop-bottom" />
+    </div>
+  )
+}
 
 function App() {
   const introRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: introRef, offset: ['start start', 'end end'] })
-  const laptopX = useTransform(scrollYProgress, [0, 0.45, 1], ['2vw', '-7vw', '4vw'])
-  const laptopY = useTransform(scrollYProgress, [0, 0.45, 1], ['8vh', '-4vh', '-16vh'])
-  const laptopRotate = useTransform(scrollYProgress, [0, 0.45, 1], [-12, 9, -6])
-  const laptopScale = useTransform(scrollYProgress, [0, 0.45, 1], [1.08, 0.92, 1.12])
-  const copyOpacity = useTransform(scrollYProgress, [0, 0.28, 0.44], [1, 1, 0])
-  const secondOpacity = useTransform(scrollYProgress, [0.5, 0.68, 1], [0, 1, 1])
+
+  const introOpacity = useTransform(scrollYProgress, [0, 0.16, 0.24], [1, 1, 0])
+  const headlineOpacity = useTransform(scrollYProgress, [0.2, 0.34, 0.58, 0.68], [0, 1, 1, 0])
+  const subOpacity = useTransform(scrollYProgress, [0.62, 0.74, 1], [0, 1, 1])
+
+  const laptopX = useTransform(scrollYProgress, [0, 0.2, 0.44, 0.7, 1], ['0vw', '0vw', '25vw', '25vw', '0vw'])
+  const laptopY = useTransform(scrollYProgress, [0, 0.2, 0.44, 0.72, 1], ['6vh', '0vh', '2vh', '-22vh', '-30vh'])
+  const laptopScale = useTransform(scrollYProgress, [0, 0.22, 0.46, 0.75, 1], [0.54, 1.04, 0.86, 0.78, 0.7])
+  const laptopRotate = useTransform(scrollYProgress, [0, 0.42, 0.72, 1], [0, -11, 9, 0])
 
   return (
     <main>
@@ -91,23 +92,23 @@ function App() {
 
       <section id="top" className="intro" ref={introRef}>
         <div className="hero-stage">
-          <motion.div
-            className="laptop-scene"
-            style={{ x: laptopX, y: laptopY, rotateY: laptopRotate, scale: laptopScale }}
-          >
-            <div className="laptop-screen">
-              <video autoPlay muted loop playsInline poster="/media/laptop-glow.png">
-                <source src="/media/laptop-glow.mp4" type="video/mp4" />
-              </video>
-              <div className="screen-fill" />
-              <strong>Next Era</strong>
-            </div>
-            <div className="laptop-base" />
+          <motion.div className="intro-label" style={{ opacity: introOpacity }}>
+            Webagentur für moderne Unternehmen
           </motion.div>
 
-          <motion.div className="hero-copy" style={{ opacity: copyOpacity }}>
-            <span>Webagentur für moderne Unternehmen</span>
+          <motion.div
+            className="laptop-wrap"
+            style={{ x: laptopX, y: laptopY, scale: laptopScale, rotateY: laptopRotate }}
+          >
+            <Laptop />
+          </motion.div>
+
+          <motion.div className="headline-panel" style={{ opacity: headlineOpacity }}>
+            <span>Was wir bauen</span>
             <h1>Websites, die sofort Vertrauen aufbauen.</h1>
+          </motion.div>
+
+          <motion.div className="hero-bottom" style={{ opacity: subOpacity }}>
             <p>
               Wir erstellen Premium-Websites für Unternehmen, Selbstständige und Creator.
               Klarer Look, gute Struktur, einfache Kontaktwege.
@@ -117,21 +118,21 @@ function App() {
               <a className="button ghost" href={`tel:${links.phone}`}><Phone size={17} /> Anrufen</a>
             </div>
           </motion.div>
-
-          <motion.div className="hero-note" style={{ opacity: secondOpacity }}>
-            <span>Was wir bauen</span>
-            <h2>Deine Website soll nicht nur schön sein. Sie soll Kunden überzeugen.</h2>
-            <p>Portfolio, Services, Kontaktformular, Socials und starke Projektbeispiele in einem sauberen System.</p>
-          </motion.div>
         </div>
       </section>
 
       <section className="proof">
-        {stats.map(([number, label]) => (
-          <article key={number}>
+        {stats.map(([number, label], index) => (
+          <motion.article
+            key={number}
+            initial={{ opacity: 0, y: 34 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.45 }}
+            transition={{ delay: index * 0.12, duration: 0.6 }}
+          >
             <strong>{number}</strong>
             <span>{label}</span>
-          </article>
+          </motion.article>
         ))}
       </section>
 
@@ -141,12 +142,18 @@ function App() {
           <h2>Alles, was eine starke Website braucht.</h2>
         </div>
         <div className="service-list">
-          {services.map((service) => (
-            <article key={service.title}>
-              <span>{service.label}</span>
-              <h3>{service.title}</h3>
-              <p>{service.text}</p>
-            </article>
+          {services.map(([title, text], index) => (
+            <motion.article
+              key={title}
+              initial={{ opacity: 0, x: -24 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.45 }}
+              transition={{ delay: index * 0.08 }}
+            >
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </motion.article>
           ))}
         </div>
       </section>
@@ -157,33 +164,22 @@ function App() {
           <h2>So zeigen wir Kunden echte Veränderung.</h2>
         </div>
         <div className="project-grid">
-          {projects.map((project) => (
-            <article key={project.title}>
-              <div className="project-top">
-                <span>{project.tag}</span>
-                <Star size={18} />
+          {projects.map(([title, tag, before, after], index) => (
+            <motion.article
+              key={title}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <div className="mockup">
+                <div />
+                <span>{tag}</span>
               </div>
-              <h3>{project.title}</h3>
-              <div className="compare">
-                <p><b>Vorher</b>{project.before}</p>
-                <p><b>Nachher</b>{project.after}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="section process">
-        <div className="section-head">
-          <span>Ablauf</span>
-          <h2>Einfach verständlich. Ohne Technikstress.</h2>
-        </div>
-        <div className="steps">
-          {steps.map((step, index) => (
-            <article key={step}>
-              <span>{String(index + 1).padStart(2, '0')}</span>
-              <p>{step}</p>
-            </article>
+              <h3>{title}</h3>
+              <p>{before}</p>
+              <p>{after}</p>
+            </motion.article>
           ))}
         </div>
       </section>
@@ -191,12 +187,47 @@ function App() {
       <section className="section accounts">
         <div>
           <span>Konten & Kanäle</span>
-          <h2>Wir verbinden Website, Socials und Anfragewege.</h2>
+          <h2>Website, Socials und Anfragewege sauber verbunden.</h2>
         </div>
         <div className="account-list">
-          {accounts.map((account) => (
-            <p key={account}><Check size={18} /> {account}</p>
+          {accounts.map(([name, Icon, text], index) => (
+            <motion.article
+              key={name}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ delay: index * 0.08 }}
+            >
+              <Icon size={24} />
+              <div>
+                <strong>{name}</strong>
+                <p>{text}</p>
+              </div>
+            </motion.article>
           ))}
+        </div>
+      </section>
+
+      <section className="section process">
+        <div className="section-head">
+          <span>Ablauf</span>
+          <h2>Einfach aufgebaut. Schnell verstanden.</h2>
+        </div>
+        <div className="process-grid">
+          <div className="process-visual">
+            <Building2 size={34} />
+            <strong>Von schwacher Website</strong>
+            <span>zu klarem Online-Auftritt</span>
+          </div>
+          <div className="steps">
+            {steps.map(([number, title, text]) => (
+              <article key={number}>
+                <span>{number}</span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
