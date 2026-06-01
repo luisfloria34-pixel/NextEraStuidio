@@ -1,7 +1,6 @@
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import {
   ArrowRight,
-  Building2,
   BriefcaseBusiness,
   Camera,
   ExternalLink,
@@ -9,136 +8,167 @@ import {
   Mail,
   MapPinned,
   Phone,
+  Sparkles,
+  UserRound,
 } from 'lucide-react'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
 const links = {
   phone: '+491234567890',
   mail: 'hello@nextera.studio',
-  instagram: 'https://instagram.com/nextera.studio',
 }
 
 const stats = [
   ['14 Tage', 'bis erste starke Preview'],
   ['100%', 'responsive Umsetzung'],
-  ['1 System', 'Website, Hosting und Pflege'],
+  ['1 System', 'Website, Hosting, Pflege'],
 ]
 
 const services = [
-  ['Website Design', 'Premium Look, klare Texte und eine Startseite, die sofort Vertrauen schafft.'],
-  ['Website Umsetzung', 'Schnelle, saubere Seiten für Handy, Tablet und Desktop.'],
-  ['Hosting & Pflege', 'Veröffentlichung, Technik, Wartung und laufende Betreuung.'],
-  ['SEO & Anfragen', 'Struktur, Kontaktwege und Inhalte, damit Besucher leichter Kunden werden.'],
+  ['Website Design', 'Premium Look, klare Texte und sofort Vertrauen.'],
+  ['Website Umsetzung', 'Saubere Seiten für Handy, Tablet und Desktop.'],
+  ['Hosting & Pflege', 'Veröffentlichung, Technik und langfristige Betreuung.'],
+  ['SEO & Anfragen', 'Struktur und Kontaktwege, damit Besucher Kunden werden.'],
 ]
 
-const projects = [
+const portfolio = [
   [
     'Handwerker Website',
     'Mehr lokale Anfragen',
-    'Vorher: alte Website ohne Vertrauen',
-    'Nachher: klare Seite mit Anfrageformular',
-    'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1400&q=80',
   ],
   [
     'Restaurant Auftritt',
     'Bessere mobile Ansicht',
-    'Vorher: Speisekarte schwer lesbar',
-    'Nachher: mobile Seite mit Maps und Kontakt',
-    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1400&q=80',
   ],
   [
     'Berater Portfolio',
     'Premium Personal Brand',
-    'Vorher: kein klares Angebot',
-    'Nachher: starker Auftritt mit Cases',
-    'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1400&q=80',
   ],
 ]
 
-const liveSites = [
-  ['Eventmanufaktur Esch', 'Event', 'Premium Events', 'https://www.eventmanufaktur-esch.de/'],
-  ['Höpfi', 'Höpfi', 'Eventmanufaktur', 'https://www.xn--hpfi-0ra.de/'],
-  ['Swyone', 'Swyone', 'Studio System', 'https://swyone.com/'],
-  ['Fuel Radar', 'Fuel Radar', 'SaaS Dashboard', 'https://www.fuel-radar.online/'],
-]
-
-const steps = [
-  ['01', 'Check', 'Wir schauen uns Website, Angebot und Zielgruppe an.'],
-  ['02', 'Preview', 'Du bekommst eine moderne Vorschau statt nur Theorie.'],
-  ['03', 'Feedback', 'Wir verbessern Design, Texte und Kontaktwege.'],
-  ['04', 'Launch', 'Wir veröffentlichen Website, Hosting und Grund-SEO.'],
+const clients = [
+  ['Eventmanufaktur Esch', 'Premium Events', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1200&q=80', 'https://www.eventmanufaktur-esch.de/'],
+  ['Höpfi', 'Eventmanufaktur', 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80', 'https://www.xn--hpfi-0ra.de/'],
+  ['Swyone', 'Studio System', 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80', 'https://swyone.com/'],
+  ['Fuel Radar', 'SaaS Dashboard', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80', 'https://www.fuel-radar.online/'],
 ]
 
 const accounts = [
-  ['Instagram', Camera, 'Content, Portfolio und Kundenvertrauen.'],
+  ['Instagram', Camera, 'Portfolio, Content und Vertrauen.'],
   ['Google Business', MapPinned, 'Lokale Sichtbarkeit und direkte Anfragen.'],
-  ['LinkedIn', BriefcaseBusiness, 'Seriöser Auftritt für B2B-Kunden.'],
-  ['Website Portfolio', Globe2, 'Cases, Services und Kontakt an einem Ort.'],
+  ['LinkedIn', BriefcaseBusiness, 'Seriöser B2B-Auftritt.'],
+  ['Website Portfolio', Globe2, 'Cases, Services und Kontakt.'],
 ]
 
-function Laptop() {
+const team = [
+  ['Luis Florian', 'Developer & CTO', 'Website-Aufbau, Designsysteme und Umsetzung.'],
+  ['Mario Augusto', 'Sales & Operations', 'Kundengewinnung, Beratung und Projektablauf.'],
+]
+
+const steps = [
+  ['01', 'Analyse', 'Wir prüfen Website, Angebot und Zielgruppe.'],
+  ['02', 'Preview', 'Du bekommst eine moderne Vorschau.'],
+  ['03', 'Feinschliff', 'Wir verbessern Design, Texte und Kontaktwege.'],
+  ['04', 'Launch', 'Wir veröffentlichen sauber mit Hosting und SEO-Basis.'],
+]
+
+function LoadingScreen() {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    let frame
+    const start = performance.now()
+    const tick = (now) => {
+      const progress = Math.min((now - start) / 1500, 1)
+      setCount(Math.round(progress * 100))
+      if (progress < 1) frame = requestAnimationFrame(tick)
+    }
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [])
+
   return (
-    <div className="laptop">
-      <div className="laptop-lid">
-        <div className="screen-inner">
-          <div className="scanlines" />
-          <div className="screen-mark">Next Era</div>
-        </div>
+    <motion.div className="loader" exit={{ opacity: 0 }} transition={{ duration: 0.45 }}>
+      <span>NextEra Studio</span>
+      <strong>{String(count).padStart(3, '0')}</strong>
+      <i style={{ transform: `scaleX(${count / 100})` }} />
+    </motion.div>
+  )
+}
+
+function PixelField() {
+  return <div className="pixel-field" />
+}
+
+function RealLaptop() {
+  return (
+    <div className="real-laptop">
+      <div className="real-lid">
+        <video autoPlay muted loop playsInline poster="/media/laptop-glow.png">
+          <source src="/media/laptop-glow.mp4" type="video/mp4" />
+        </video>
+        <span>Next Era</span>
       </div>
-      <div className="laptop-hinge" />
-      <div className="laptop-bottom" />
+      <div className="real-keyboard" />
+      <div className="real-base" />
     </div>
   )
 }
 
 function App() {
+  const [loading, setLoading] = useState(true)
   const introRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: introRef, offset: ['start start', 'end end'] })
 
-  const introOpacity = useTransform(scrollYProgress, [0, 0.09, 0.14], [1, 1, 0])
-  const headlineOpacity = useTransform(scrollYProgress, [0.19, 0.32, 0.54, 0.63], [0, 1, 1, 0])
-  const subOpacity = useTransform(scrollYProgress, [0.62, 0.74, 1], [0, 1, 1])
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1750)
+    return () => clearTimeout(timer)
+  }, [])
 
-  const laptopX = useTransform(scrollYProgress, [0, 0.18, 0.4, 0.68, 1], ['0vw', '0vw', '33vw', '22vw', '0vw'])
-  const laptopY = useTransform(scrollYProgress, [0, 0.18, 0.4, 0.72, 1], ['8vh', '0vh', '1vh', '-18vh', '-26vh'])
-  const laptopScale = useTransform(scrollYProgress, [0, 0.2, 0.44, 0.75, 1], [0.42, 1.16, 0.78, 0.82, 0.78])
-  const laptopRotate = useTransform(scrollYProgress, [0, 0.4, 0.72, 1], [0, -12, 7, 0])
+  const handleMouseMove = (event) => {
+    document.documentElement.style.setProperty('--mx', `${event.clientX}px`)
+    document.documentElement.style.setProperty('--my', `${event.clientY}px`)
+  }
+
+  const introOpacity = useTransform(scrollYProgress, [0, 0.1, 0.16], [1, 1, 0])
+  const headlineOpacity = useTransform(scrollYProgress, [0.2, 0.32, 0.53, 0.62], [0, 1, 1, 0])
+  const bottomOpacity = useTransform(scrollYProgress, [0.64, 0.76, 1], [0, 1, 1])
+  const laptopX = useTransform(scrollYProgress, [0, 0.2, 0.42, 0.66, 1], ['0vw', '0vw', '31vw', '0vw', '0vw'])
+  const laptopY = useTransform(scrollYProgress, [0, 0.2, 0.42, 0.66, 1], ['7vh', '0vh', '1vh', '1vh', '-10vh'])
+  const laptopScale = useTransform(scrollYProgress, [0, 0.2, 0.42, 0.66, 1], [0.42, 1.12, 0.76, 1.02, 0.78])
+  const laptopRotate = useTransform(scrollYProgress, [0, 0.42, 0.66, 1], [0, -10, 0, 0])
 
   return (
-    <main>
-      <nav className="nav">
-        <a className="brand" href="#top">NextEra Studio</a>
-        <div>
-          <a href="#services">Services</a>
-          <a href="#work">Cases</a>
-          <a href="#contact">Contact</a>
-        </div>
+    <main onMouseMove={handleMouseMove}>
+      <AnimatePresence>{loading && <LoadingScreen />}</AnimatePresence>
+
+      <nav className="nav-pill">
+        <a className="nav-logo" href="#top">NE</a>
+        <a href="#work">Arbeit</a>
+        <a href="#clients">Kunden</a>
+        <a href="#team">Team</a>
+        <a className="nav-cta" href="#contact">Anfrage</a>
       </nav>
 
       <section id="top" className="intro" ref={introRef}>
         <div className="hero-stage">
+          <PixelField />
           <motion.div className="intro-label" style={{ opacity: introOpacity }}>
             Webagentur für moderne Unternehmen
           </motion.div>
-
-          <motion.div
-            className="laptop-wrap"
-            style={{ x: laptopX, y: laptopY, scale: laptopScale, rotateY: laptopRotate }}
-          >
-            <Laptop />
+          <motion.div className="laptop-wrap" style={{ x: laptopX, y: laptopY, scale: laptopScale, rotateY: laptopRotate }}>
+            <RealLaptop />
           </motion.div>
-
           <motion.div className="headline-panel" style={{ opacity: headlineOpacity }}>
             <span>Was wir bauen</span>
             <h1>Websites, die sofort Vertrauen aufbauen.</h1>
           </motion.div>
-
-          <motion.div className="hero-bottom" style={{ opacity: subOpacity }}>
-            <p>
-              Wir erstellen Premium-Websites für Unternehmen, Selbstständige und Creator.
-              Klarer Look, gute Struktur, einfache Kontaktwege.
-            </p>
+          <motion.div className="hero-bottom" style={{ opacity: bottomOpacity }}>
+            <p>Wir erstellen Premium-Websites für Unternehmen, Selbstständige und Creator. Klarer Look, gute Struktur, einfache Kontaktwege.</p>
             <div className="hero-actions">
               <a className="button primary" href="#contact">Kostenlose Anfrage <ArrowRight size={17} /></a>
               <a className="button ghost" href={`tel:${links.phone}`}><Phone size={17} /> Anrufen</a>
@@ -149,13 +179,7 @@ function App() {
 
       <section className="proof">
         {stats.map(([number, label], index) => (
-          <motion.article
-            key={number}
-            initial={{ opacity: 0, y: 34 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.45 }}
-            transition={{ delay: index * 0.12, duration: 0.6 }}
-          >
+          <motion.article key={number} initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}>
             <strong>{number}</strong>
             <span>{label}</span>
           </motion.article>
@@ -163,19 +187,10 @@ function App() {
       </section>
 
       <section id="services" className="section services">
-        <div className="section-head">
-          <span>Services</span>
-          <h2>Alles, was eine starke Website braucht.</h2>
-        </div>
+        <SectionHead eyebrow="Services" title="Alles, was eine starke Website braucht." />
         <div className="service-list">
           {services.map(([title, text], index) => (
-            <motion.article
-              key={title}
-              initial={{ opacity: 0, x: -24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.45 }}
-              transition={{ delay: index * 0.08 }}
-            >
+            <motion.article key={title} initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }}>
               <span>{String(index + 1).padStart(2, '0')}</span>
               <h3>{title}</h3>
               <p>{text}</p>
@@ -185,110 +200,71 @@ function App() {
       </section>
 
       <section id="work" className="section work">
-        <div className="section-head">
-          <span>Portfolio</span>
-          <h2>So zeigen wir Kunden echte Veränderung.</h2>
-        </div>
-        <div className="project-grid">
-          {projects.map(([title, tag, before, after, image], index) => (
-            <motion.article
-              key={title}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.35 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <div className="mockup" style={{ backgroundImage: `url(${image})` }}>
-                <span>{tag}</span>
-              </div>
-              <h3>{title}</h3>
-              <p>{before}</p>
-              <p>{after}</p>
+        <SectionHead eyebrow="Portfolio" title="Unsere Arbeit zeigt echte Veränderung." />
+        <div className="portfolio-grid">
+          {portfolio.map(([title, tag, image], index) => (
+            <motion.article key={title} className="image-card" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}>
+              <img src={image} alt="" />
+              <div><span>{tag}</span><h3>{title}</h3></div>
             </motion.article>
           ))}
         </div>
       </section>
 
-      <section className="section live-sites">
-        <div className="section-head">
-          <span>Live Previews</span>
-          <h2>Vier Website-Beispiele direkt verlinkt.</h2>
-        </div>
-        <div className="site-grid">
-          {liveSites.map(([name, mark, label, url], index) => (
-            <motion.a
-              href={url}
-              target="_blank"
-              rel="noreferrer"
-              key={url}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ delay: index * 0.08 }}
-            >
-              <div className="browser-preview">
-                <div className="browser-bar"><i /><i /><i /></div>
-                <div className="site-preview">
-                  <b>{mark}</b>
-                  <small>{label}</small>
-                  <em />
-                </div>
+      <section id="clients" className="section clients">
+        <SectionHead eyebrow="Unsere Kunden" title="Live-Projekte direkt verlinkt." />
+        <div className="client-grid">
+          {clients.map(([name, tag, image, url], index) => (
+            <motion.a href={url} target="_blank" rel="noreferrer" key={name} initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }}>
+              <img src={image} alt="" />
+              <div>
+                <span>{tag}</span>
+                <strong>{name}</strong>
+                <small>Projekt öffnen <ExternalLink size={14} /></small>
               </div>
-              <strong>{name}</strong>
-              <span>Preview öffnen <ExternalLink size={15} /></span>
             </motion.a>
           ))}
         </div>
       </section>
 
       <section className="section accounts">
-        <div>
-          <span>Konten & Kanäle</span>
-          <h2>Website, Socials und Anfragewege sauber verbunden.</h2>
-        </div>
+        <SectionHead eyebrow="Konten" title="Website, Socials und Anfragewege verbunden." />
         <div className="account-list">
           {accounts.map(([name, Icon, text], index) => (
-            <motion.article
-              key={name}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ delay: index * 0.08 }}
-            >
+            <motion.article key={name} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }}>
               <Icon size={24} />
-              <div>
-                <strong>{name}</strong>
-                <p>{text}</p>
-              </div>
+              <div><strong>{name}</strong><p>{text}</p></div>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
+      <section id="team" className="section team">
+        <SectionHead eyebrow="Team" title="Kleines Team. Klare Rollen. Erweiterbar." />
+        <div className="team-row">
+          {team.map(([name, role, text]) => (
+            <motion.article key={name} initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <div className="avatar"><UserRound size={42} /></div>
+              <span>{role}</span>
+              <h3>{name}</h3>
+              <p>{text}</p>
             </motion.article>
           ))}
         </div>
       </section>
 
       <section className="section process">
-        <div className="section-head">
-          <span>Ablauf</span>
-          <h2>Einfach aufgebaut. Schnell verstanden.</h2>
-        </div>
-        <div className="process-grid">
-          <div className="process-visual">
-            <Building2 size={34} />
-            <strong>Von schwacher Website</strong>
-            <span>zu klarem Online-Auftritt</span>
-          </div>
-          <div className="steps">
-            {steps.map(([number, title, text]) => (
-              <article key={number}>
-                <span>{number}</span>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </article>
-            ))}
-          </div>
+        <SectionHead eyebrow="Ablauf" title="Einfach aufgebaut. Schnell verstanden." />
+        <div className="steps">
+          {steps.map(([number, title, text]) => (
+            <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>
+          ))}
         </div>
       </section>
 
       <section id="contact" className="contact">
+        <PixelField />
+        <div className="marquee"><span>BUILT FOR TOMORROW - BUILT FOR TOMORROW - BUILT FOR TOMORROW - </span></div>
         <div className="contact-copy">
           <span>Kontakt</span>
           <h2>Schick uns dein Projekt.</h2>
@@ -297,26 +273,23 @@ function App() {
           <a className="phone-link" href={`mailto:${links.mail}`}><Mail size={18} /> E-Mail senden</a>
         </div>
         <form>
-          <label>
-            Name
-            <input name="name" placeholder="Max Mustermann" />
-          </label>
-          <label>
-            Firma
-            <input name="company" placeholder="Dein Unternehmen" />
-          </label>
-          <label>
-            Telefon oder E-Mail
-            <input name="contact" placeholder="+49 ... oder mail@..." />
-          </label>
-          <label>
-            Was brauchst du?
-            <textarea name="message" placeholder="Neue Website, Relaunch, Hosting, SEO ..." />
-          </label>
+          <label>Name<input name="name" placeholder="Max Mustermann" /></label>
+          <label>Firma<input name="company" placeholder="Dein Unternehmen" /></label>
+          <label>Telefon oder E-Mail<input name="contact" placeholder="+49 ... oder mail@..." /></label>
+          <label>Was brauchst du?<textarea name="message" placeholder="Neue Website, Relaunch, Hosting, SEO ..." /></label>
           <button type="button">Anfrage senden <ArrowRight size={17} /></button>
         </form>
       </section>
     </main>
+  )
+}
+
+function SectionHead({ eyebrow, title }) {
+  return (
+    <motion.div className="section-head" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }}>
+      <span>{eyebrow}</span>
+      <h2>{title}</h2>
+    </motion.div>
   )
 }
 
