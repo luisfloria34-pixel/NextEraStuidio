@@ -51,10 +51,11 @@ const portfolio = [
 ]
 
 const clients = [
-  ['Eventmanufaktur Esch', 'Premium Events', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1200&q=80', 'https://www.eventmanufaktur-esch.de/'],
-  ['Höpfi', 'Eventmanufaktur', 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80', 'https://www.xn--hpfi-0ra.de/'],
-  ['Swyone', 'Studio System', 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80', 'https://swyone.com/'],
-  ['Fuel Radar', 'SaaS Dashboard', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80', 'https://www.fuel-radar.online/'],
+  ['Luis Floria', 'Personal Brand', '/media/previews/luis-floria.jpg', 'https://luis-floria-hustler-portfolio.vercel.app/'],
+  ['Eventmanufaktur Esch', 'Premium Events', '/media/previews/eventmanufaktur.jpg', 'https://www.eventmanufaktur-esch.de/'],
+  ['Hüpfi', 'Eventmanufaktur', '/media/previews/huepfi.jpg', 'https://www.xn--hpfi-0ra.de/'],
+  ['Swyone', 'Studio System', '/media/previews/swyone.jpg', 'https://swyone.com/'],
+  ['Fuel Radar', 'SaaS Dashboard', '/media/previews/fuel-radar.jpg', 'https://www.fuel-radar.online/'],
 ]
 
 const accounts = [
@@ -107,14 +108,10 @@ function PixelField() {
 function RealLaptop() {
   return (
     <div className="real-laptop">
-      <div className="real-lid">
-        <video autoPlay muted loop playsInline poster="/media/laptop-glow.png">
-          <source src="/media/laptop-glow.mp4" type="video/mp4" />
-        </video>
+      <img src="/media/laptop-real.jpg" alt="" />
+      <div className="laptop-title">
         <span>Next Era</span>
       </div>
-      <div className="real-keyboard" />
-      <div className="real-base" />
     </div>
   )
 }
@@ -137,10 +134,10 @@ function App() {
   const introOpacity = useTransform(scrollYProgress, [0, 0.1, 0.16], [1, 1, 0])
   const headlineOpacity = useTransform(scrollYProgress, [0.2, 0.32, 0.53, 0.62], [0, 1, 1, 0])
   const bottomOpacity = useTransform(scrollYProgress, [0.64, 0.76, 1], [0, 1, 1])
-  const laptopX = useTransform(scrollYProgress, [0, 0.2, 0.42, 0.66, 1], ['0vw', '0vw', '31vw', '0vw', '0vw'])
-  const laptopY = useTransform(scrollYProgress, [0, 0.2, 0.42, 0.66, 1], ['7vh', '0vh', '1vh', '1vh', '-10vh'])
-  const laptopScale = useTransform(scrollYProgress, [0, 0.2, 0.42, 0.66, 1], [0.42, 1.12, 0.76, 1.02, 0.78])
-  const laptopRotate = useTransform(scrollYProgress, [0, 0.42, 0.66, 1], [0, -10, 0, 0])
+  const laptopX = useTransform(scrollYProgress, [0, 0.2, 0.42, 0.66, 1], ['0vw', '0vw', '30vw', '0vw', '0vw'])
+  const laptopY = useTransform(scrollYProgress, [0, 0.2, 0.42, 0.66, 1], ['4vh', '-1vh', '1vh', '0vh', '-7vh'])
+  const laptopScale = useTransform(scrollYProgress, [0, 0.2, 0.42, 0.66, 1], [0.34, 1.06, 0.68, 0.96, 0.78])
+  const laptopRotate = useTransform(scrollYProgress, [0, 0.42, 0.66, 1], [0, -8, 0, 0])
 
   return (
     <main onMouseMove={handleMouseMove}>
