@@ -209,83 +209,32 @@ p {
 }
 
 .laptop-wrap {
-  left: max(calc(50% - 560px), 12vw);
+  left: calc(50% - min(310px, 21vw));
   top: 14vh;
-  width: min(1120px, 76vw);
+  width: min(620px, 42vw);
   transform-origin: center center;
   transform-style: preserve-3d;
 }
 
-.real-laptop {
+.hero-device {
   position: relative;
   width: 100%;
-  aspect-ratio: 1898 / 1412;
-  transform: rotateX(3deg);
+  aspect-ratio: 1042 / 1638;
+  transform: rotateX(3deg) rotateZ(-5deg);
   transform-style: preserve-3d;
   filter:
     drop-shadow(0 78px 150px rgba(0, 0, 0, 0.74))
     drop-shadow(0 0 84px rgba(101, 170, 255, 0.28));
 }
 
-.real-laptop img {
+.hero-device img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
   opacity: 0.98;
-  mix-blend-mode: lighten;
-  -webkit-mask-image: radial-gradient(ellipse at 53% 46%, #000 0 54%, rgba(0, 0, 0, 0.82) 64%, transparent 79%);
-  mask-image: radial-gradient(ellipse at 53% 46%, #000 0 54%, rgba(0, 0, 0, 0.82) 64%, transparent 79%);
-}
-
-.laptop-title {
-  position: absolute;
-  left: 39%;
-  top: 11%;
-  width: 39%;
-  height: 29%;
-  display: grid;
-  place-items: center;
-  transform: perspective(950px) rotateX(4deg) rotateZ(-4deg) skewX(-8deg);
-  pointer-events: none;
-}
-
-.laptop-title::before {
-  content: "";
-  position: absolute;
-  inset: 8% 2%;
-  background:
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.32), transparent 38%),
-    radial-gradient(circle at 52% 48%, rgba(101, 170, 255, 0.44), transparent 58%);
-  filter: blur(10px);
-  opacity: 0.9;
-}
-
-.laptop-title::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.09) 0 1px, transparent 1px 6px),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
-  mix-blend-mode: screen;
-  opacity: 0.7;
-}
-
-.laptop-title span {
-  position: relative;
-  z-index: 2;
-  color: #fff;
-  font-size: clamp(32px, 4.1vw, 76px);
-  font-weight: 900;
-  letter-spacing: 0;
-  text-transform: capitalize;
-  text-shadow:
-    0 0 10px rgba(255, 255, 255, 0.96),
-    0 0 28px rgba(255, 255, 255, 0.86),
-    0 0 60px rgba(101, 170, 255, 0.86);
-  white-space: nowrap;
+  filter: contrast(1.08) saturate(1.08);
 }
 
 .headline-panel {
@@ -714,8 +663,8 @@ form button {
 
   .laptop-wrap {
     top: 35vh;
-    left: -9vw;
-    width: 118vw;
+    left: 9vw;
+    width: 82vw;
   }
 
   .headline-panel {
@@ -747,7 +696,7 @@ form button {
 
   .laptop-wrap {
     top: 43vh;
-    width: 142vw;
+    width: 92vw;
   }
 
   .hero-bottom p {

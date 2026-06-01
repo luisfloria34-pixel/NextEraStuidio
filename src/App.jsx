@@ -105,13 +105,10 @@ function PixelField() {
   return <div className="pixel-field" />
 }
 
-function RealLaptop() {
+function HeroDevice() {
   return (
-    <div className="real-laptop">
-      <img src="/media/laptop-real.jpg" alt="" />
-      <div className="laptop-title">
-        <span>Next Era</span>
-      </div>
+    <div className="hero-device">
+      <img src="/media/phone-nextera-cut.png" alt="" />
     </div>
   )
 }
@@ -158,7 +155,7 @@ function App() {
             Webagentur für moderne Unternehmen
           </motion.div>
           <motion.div className="laptop-wrap" style={{ x: laptopX, y: laptopY, scale: laptopScale, rotateY: laptopRotate }}>
-            <RealLaptop />
+            <HeroDevice />
           </motion.div>
           <motion.div className="headline-panel" style={{ opacity: headlineOpacity }}>
             <span>Was wir bauen</span>
