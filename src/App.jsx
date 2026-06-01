@@ -175,12 +175,44 @@ function ClientSlideshow() {
 
 function App() {
   const [loading, setLoading] = useState(true)
+  const [deviceMode, setDeviceMode] = useState('hero')
+  const [entryStarted, setEntryStarted] = useState(false)
   const introRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: introRef, offset: ['start start', 'end end'] })
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1750)
     return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    if (loading) return undefined
+    const timer = setTimeout(() => setEntryStarted(true), 300)
+    return () => clearTimeout(timer)
+  }, [loading])
+
+  useEffect(() => {
+    const targets = [
+      ['top', 'hero'],
+      ['services', 'services'],
+      ['clients', 'clients'],
+      ['contact', 'cta'],
+    ]
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+        const match = targets.find(([id]) => id === visible?.target.id)
+        if (match) setDeviceMode(match[1])
+      },
+      { threshold: [0.35, 0.55], rootMargin: '-20% 0px -35% 0px' },
+    )
+    targets.forEach(([id]) => {
+      const element = document.getElementById(id)
+      if (element) observer.observe(element)
+    })
+    return () => observer.disconnect()
   }, [])
 
   const handleMouseMove = (event) => {
@@ -191,11 +223,6 @@ function App() {
   const introOpacity = useTransform(scrollYProgress, [0, 0.1, 0.16], [1, 1, 0])
   const headlineOpacity = useTransform(scrollYProgress, [0.2, 0.32, 0.53, 0.62], [0, 1, 1, 0])
   const bottomOpacity = useTransform(scrollYProgress, [0.64, 0.76, 1], [0, 1, 1])
-  const laptopX = useTransform(scrollYProgress, [0, 0.2, 0.42, 0.66, 1], ['0vw', '0vw', '30vw', '0vw', '0vw'])
-  const laptopY = useTransform(scrollYProgress, [0, 0.2, 0.42, 0.66, 1], ['4vh', '-1vh', '1vh', '0vh', '-7vh'])
-  const laptopScale = useTransform(scrollYProgress, [0, 0.2, 0.42, 0.66, 1], [0.34, 1.06, 0.68, 0.96, 0.78])
-  const laptopRotate = useTransform(scrollYProgress, [0, 0.42, 0.66, 1], [0, -8, 0, 0])
-
   return (
     <main onMouseMove={handleMouseMove}>
       <AnimatePresence>{loading && <LoadingScreen />}</AnimatePresence>
@@ -214,9 +241,16 @@ function App() {
           <motion.div className="intro-label" style={{ opacity: introOpacity }}>
             Webagentur für moderne Unternehmen
           </motion.div>
-          <motion.div className="laptop-wrap" style={{ x: laptopX, y: laptopY, scale: laptopScale, rotateY: laptopRotate }}>
-            <HeroDevice />
-          </motion.div>
+          {!loading && (
+            <motion.div
+              className={`laptop-wrap ${entryStarted ? `device-${deviceMode}` : 'device-entry'}`}
+              initial={{ opacity: 0, scale: 0.3, x: '-50%' }}
+              animate={{ opacity: 1, scale: 1, x: '13vw' }}
+              transition={{ duration: 1.1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <HeroDevice />
+            </motion.div>
+          )}
           <motion.div className="headline-panel" style={{ opacity: headlineOpacity }}>
             <span>Was wir bauen</span>
             <h1>Websites, die sofort Vertrauen aufbauen.</h1>

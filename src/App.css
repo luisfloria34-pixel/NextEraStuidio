@@ -209,22 +209,55 @@ p {
 }
 
 .laptop-wrap {
-  left: calc(50% - min(310px, 21vw));
+  left: 50%;
   top: 14vh;
-  width: min(620px, 42vw);
+  width: min(420px, 31vw);
   transform-origin: center center;
   transform-style: preserve-3d;
+  rotate: var(--phone-rotate, 6deg);
+  transition: rotate 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.device-entry {
+  --phone-rotate: 0deg;
+}
+
+.device-hero {
+  --phone-rotate: 6deg;
+}
+
+.device-services {
+  --phone-rotate: 10deg;
+}
+
+.device-clients {
+  --phone-rotate: 3deg;
+}
+
+.device-cta {
+  --phone-rotate: -5deg;
 }
 
 .hero-device {
   position: relative;
   width: 100%;
   aspect-ratio: 1042 / 1638;
-  transform: rotateX(3deg) rotateZ(-5deg);
   transform-style: preserve-3d;
+  animation: phoneIdle 4s ease-in-out 1.4s infinite;
   filter:
     drop-shadow(0 78px 150px rgba(0, 0, 0, 0.74))
     drop-shadow(0 0 84px rgba(101, 170, 255, 0.28));
+}
+
+@keyframes phoneIdle {
+  0%,
+  100% {
+    transform: translateY(-8px) rotate(-2deg);
+  }
+
+  50% {
+    transform: translateY(8px) rotate(1deg);
+  }
 }
 
 .hero-device img {
