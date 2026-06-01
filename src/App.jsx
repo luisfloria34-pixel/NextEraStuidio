@@ -3,6 +3,8 @@ import {
   ArrowRight,
   BriefcaseBusiness,
   Camera,
+  ChevronLeft,
+  ChevronRight,
   ExternalLink,
   Globe2,
   Mail,
@@ -113,6 +115,64 @@ function HeroDevice() {
   )
 }
 
+function ClientSlideshow() {
+  const [active, setActive] = useState(0)
+  const current = clients[active]
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActive((index) => (index + 1) % clients.length)
+    }, 3800)
+    return () => clearInterval(timer)
+  }, [])
+
+  const changeSlide = (direction) => {
+    setActive((index) => (index + direction + clients.length) % clients.length)
+  }
+
+  return (
+    <div className="client-slider">
+      <AnimatePresence mode="wait">
+        <motion.article
+          className="client-feature"
+          key={current[0]}
+          initial={{ opacity: 0, x: 42, scale: 0.98 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          exit={{ opacity: 0, x: -42, scale: 0.98 }}
+          transition={{ duration: 0.55, ease: 'easeOut' }}
+        >
+          <img src={current[2]} alt="" />
+          <div>
+            <span>{current[1]}</span>
+            <strong>{current[0]}</strong>
+            <a href={current[3]} target="_blank" rel="noreferrer">Projekt öffnen <ExternalLink size={14} /></a>
+          </div>
+        </motion.article>
+      </AnimatePresence>
+
+      <div className="slider-controls">
+        <button type="button" onClick={() => changeSlide(-1)} aria-label="Vorheriges Projekt">
+          <ChevronLeft size={22} />
+        </button>
+        <div className="slider-dots">
+          {clients.map(([name], index) => (
+            <button
+              type="button"
+              aria-label={name}
+              className={index === active ? 'active' : ''}
+              key={name}
+              onClick={() => setActive(index)}
+            />
+          ))}
+        </div>
+        <button type="button" onClick={() => changeSlide(1)} aria-label="Nächstes Projekt">
+          <ChevronRight size={22} />
+        </button>
+      </div>
+    </div>
+  )
+}
+
 function App() {
   const [loading, setLoading] = useState(true)
   const introRef = useRef(null)
@@ -207,18 +267,7 @@ function App() {
 
       <section id="clients" className="section clients">
         <SectionHead eyebrow="Unsere Kunden" title="Live-Projekte direkt verlinkt." />
-        <div className="client-grid">
-          {clients.map(([name, tag, image, url], index) => (
-            <motion.a href={url} target="_blank" rel="noreferrer" key={name} initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }}>
-              <img src={image} alt="" />
-              <div>
-                <span>{tag}</span>
-                <strong>{name}</strong>
-                <small>Projekt öffnen <ExternalLink size={14} /></small>
-              </div>
-            </motion.a>
-          ))}
-        </div>
+        <ClientSlideshow />
       </section>
 
       <section className="section accounts">

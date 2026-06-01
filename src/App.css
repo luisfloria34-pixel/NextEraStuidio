@@ -378,7 +378,7 @@ form button {
 
 .service-list span,
 .image-card span,
-.client-grid span,
+.client-feature span,
 .steps span {
   color: var(--blue);
   font-size: 12px;
@@ -388,7 +388,6 @@ form button {
 }
 
 .portfolio-grid,
-.client-grid,
 .team-row {
   position: relative;
   display: grid;
@@ -396,18 +395,15 @@ form button {
   gap: 18px;
 }
 
-.client-grid {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
 .image-card,
-.client-grid a,
+.client-feature,
 .team-row article,
 .account-list article,
 .steps article {
   border: 1px solid var(--stroke);
   background: rgba(255, 255, 255, 0.045);
   overflow: hidden;
+  border-radius: 24px;
 }
 
 .image-card {
@@ -415,26 +411,27 @@ form button {
 }
 
 .image-card img,
-.client-grid img {
+.client-feature img {
   width: 100%;
   height: 250px;
   object-fit: cover;
   filter: saturate(0.94) contrast(1.04);
   transition: transform 0.7s ease;
+  border-radius: 20px 20px 0 0;
 }
 
 .image-card:hover img,
-.client-grid a:hover img {
+.client-feature:hover img {
   transform: scale(1.05);
 }
 
 .image-card div,
-.client-grid div {
+.client-feature div {
   padding: 24px;
 }
 
 .image-card h3,
-.client-grid strong {
+.client-feature strong {
   display: block;
   margin-top: 12px;
   font-size: clamp(24px, 1.8vw, 31px);
@@ -442,24 +439,100 @@ form button {
   overflow-wrap: anywhere;
 }
 
-.client-grid a {
-  min-height: 410px;
+.client-slider {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
 }
 
-.client-grid img {
-  height: 210px;
+.clients {
+  padding-top: clamp(58px, 7vw, 96px);
 }
 
-.client-grid small {
+.clients .section-head {
+  margin-bottom: 32px;
+}
+
+.clients h2 {
+  font-size: clamp(36px, 5vw, 70px);
+}
+
+.client-feature {
+  display: grid;
+  min-height: 500px;
+  grid-template-rows: minmax(0, 1fr) auto;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035)),
+    rgba(255, 255, 255, 0.035);
+  box-shadow:
+    0 36px 110px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.client-feature img {
+  height: clamp(290px, 36vw, 390px);
+  object-position: top center;
+}
+
+.client-feature div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 12px 24px;
+}
+
+.client-feature span {
+  grid-column: 1 / -1;
+}
+
+.client-feature a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 22px;
   color: var(--blue);
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.slider-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.slider-controls button {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid var(--stroke);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+
+.slider-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.slider-dots button {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border-color: transparent;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.slider-dots button.active {
+  width: 32px;
+  background: var(--blue);
 }
 
 .accounts {
@@ -673,7 +746,6 @@ form button {
 
   .proof,
   .portfolio-grid,
-  .client-grid,
   .accounts,
   .account-list,
   .team-row,
@@ -713,7 +785,7 @@ form button {
   }
 
   .image-card,
-  .client-grid a,
+  .client-feature,
   .team-row article {
     min-height: auto;
   }
