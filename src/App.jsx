@@ -353,6 +353,11 @@ function App() {
   const introOpacity = useTransform(scrollYProgress, [0, 0.1, 0.16], [1, 1, 0])
   const headlineOpacity = useTransform(scrollYProgress, [0.2, 0.32, 0.53, 0.62], [0, 1, 1, 0])
   const bottomOpacity = useTransform(scrollYProgress, [0.64, 0.76, 1], [0, 1, 1])
+  const deviceX = useTransform(
+    scrollYProgress,
+    [0, 0.16, 0.34, 0.62, 0.8, 1],
+    ['-50%', '-50%', '13vw', '13vw', '-50%', '-50%'],
+  )
   return (
     <main onMouseMove={handleMouseMove}>
       <AnimatePresence>{loading && <LoadingScreen />}</AnimatePresence>
@@ -372,13 +377,15 @@ function App() {
             Webagentur für moderne Unternehmen
           </motion.div>
           {!loading && (
-            <motion.div
-              className={`laptop-wrap ${entryStarted ? `device-${deviceMode}` : 'device-entry'}`}
-              initial={{ opacity: 0, scale: 0.3, x: '-50%' }}
-              animate={{ opacity: 1, scale: 1, x: '13vw' }}
-              transition={{ duration: 1.1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <HeroDevice />
+            <motion.div className="device-motion-frame" style={{ x: deviceX }}>
+              <motion.div
+                className={`laptop-wrap ${entryStarted ? `device-${deviceMode}` : 'device-entry'}`}
+                initial={{ opacity: 0, scale: 0.3 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <HeroDevice />
+              </motion.div>
             </motion.div>
           )}
           <motion.div className="headline-panel" style={{ opacity: headlineOpacity }}>
