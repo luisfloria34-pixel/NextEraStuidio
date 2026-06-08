@@ -862,13 +862,37 @@ form button {
   }
 
   .device-motion-frame {
-    top: 35vh;
+    top: 30vh;
     left: 50%;
-    width: 82vw;
+    width: 58vw;
+    max-width: 270px;
+    z-index: 1;
+  }
+
+  .laptop-wrap {
+    opacity: 0.64;
   }
 
   .headline-panel {
-    top: 16vh;
+    top: 15vh;
+    width: calc(100vw - 40px);
+    z-index: 4;
+  }
+
+  .hero-bottom {
+    width: calc(100vw - 40px);
+    z-index: 4;
+  }
+
+  .hero-stage::before {
+    z-index: 3;
+    background:
+      radial-gradient(ellipse 95% 55% at 45% 34%, rgba(0, 0, 0, 0.72) 0%, transparent 72%),
+      linear-gradient(180deg, rgba(5, 6, 7, 0.2) 0%, rgba(5, 6, 7, 0.42) 100%);
+  }
+
+  .intro-label {
+    z-index: 4;
   }
 
   .proof,
@@ -899,11 +923,16 @@ form button {
   }
 
   .device-motion-frame {
-    top: 43vh;
-    width: 92vw;
+    top: 33vh;
+    width: 58vw;
+    max-width: 240px;
   }
 
   .hero-bottom p {
+    max-width: 300px;
+  }
+
+  .hero-actions {
     max-width: 340px;
   }
 

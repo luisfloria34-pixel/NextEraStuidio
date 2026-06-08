@@ -307,8 +307,17 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [deviceMode, setDeviceMode] = useState('hero')
   const [entryStarted, setEntryStarted] = useState(false)
+  const [isCompact, setIsCompact] = useState(false)
   const introRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: introRef, offset: ['start start', 'end end'] })
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 980px)')
+    const update = () => setIsCompact(query.matches)
+    update()
+    query.addEventListener('change', update)
+    return () => query.removeEventListener('change', update)
+  }, [])
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1750)
@@ -353,11 +362,14 @@ function App() {
   const introOpacity = useTransform(scrollYProgress, [0, 0.1, 0.16], [1, 1, 0])
   const headlineOpacity = useTransform(scrollYProgress, [0.2, 0.32, 0.53, 0.62], [0, 1, 1, 0])
   const bottomOpacity = useTransform(scrollYProgress, [0.64, 0.76, 1], [0, 1, 1])
-  const deviceX = useTransform(
+  const deviceXMotion = useTransform(
     scrollYProgress,
     [0, 0.16, 0.34, 0.62, 0.8, 1],
     ['-50%', '-50%', '13vw', '13vw', '-50%', '-50%'],
   )
+  // On compact screens the device stays centered behind the text instead of
+  // shifting sideways, so it never overlaps the headline or CTA.
+  const deviceX = isCompact ? '-50%' : deviceXMotion
   return (
     <main onMouseMove={handleMouseMove}>
       <AnimatePresence>{loading && <LoadingScreen />}</AnimatePresence>
