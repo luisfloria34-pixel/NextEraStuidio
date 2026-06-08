@@ -1,16 +1,51 @@
-# React + Vite
+# NextEra Studio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Luxury Webagentur Landingpage fuer moderne Unternehmen, Selbststaendige und Creator.
 
-Currently, two official plugins are available:
+Live:
+https://next-era-stuidio.vercel.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Fokus
 
-## React Compiler
+- Cinematic Hero mit interaktivem Particle Background
+- Scroll-basierte Phone Animation
+- Premium Portfolio Showcase
+- Kundenprojekte direkt verlinkt
+- Services, Ablauf, Team und Kontaktformular
+- Mobile optimiert
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React
+- Vite
+- Framer Motion
+- Three.js / Canvas Effects
+- Lucide Icons
+- Vercel Deployment
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Scripts
+
+```bash
+npm install
+npm run dev
+npm run build
+npm run preview
+```
+
+## Deployment
+
+Vercel erkennt Vite automatisch.
+
+Build Command:
+```bash
+npm run build
+```
+
+Output Directory:
+```bash
+dist
+```
+
+## Brand
+
+NextEra Studio baut cinematic Websites, digitale Systeme und moderne Markenauftritte fuer Unternehmen, Founder und Creator.
