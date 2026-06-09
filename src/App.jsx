@@ -360,16 +360,41 @@ function App() {
   }
 
   const introOpacity = useTransform(scrollYProgress, [0, 0.1, 0.16], [1, 1, 0])
-  const headlineOpacity = useTransform(scrollYProgress, [0.2, 0.32, 0.53, 0.62], [0, 1, 1, 0])
-  const bottomOpacity = useTransform(scrollYProgress, [0.64, 0.76, 1], [0, 1, 1])
+  const headlineOpacityDesktop = useTransform(scrollYProgress, [0.42, 0.5, 0.64, 0.72], [0, 1, 1, 0])
+  const headlineOpacityMobile = useTransform(scrollYProgress, [0.58, 0.68, 0.78, 0.86], [0, 1, 1, 0])
+  const bottomOpacityDesktop = useTransform(scrollYProgress, [0.76, 0.84, 1], [0, 1, 1])
+  const bottomOpacityMobile = useTransform(scrollYProgress, [0.9, 0.96, 1], [0, 1, 1])
+  const headlineOpacity = isCompact ? headlineOpacityMobile : headlineOpacityDesktop
+  const bottomOpacity = isCompact ? bottomOpacityMobile : bottomOpacityDesktop
   const deviceXMotion = useTransform(
     scrollYProgress,
-    [0, 0.16, 0.34, 0.62, 0.8, 1],
-    ['-50%', '-50%', '13vw', '13vw', '-50%', '-50%'],
+    [0, 0.18, 0.34, 0.7, 0.88, 1],
+    ['-50%', '-50%', '14vw', '14vw', '-50%', '-50%'],
   )
-  // On compact screens the device stays centered behind the text instead of
-  // shifting sideways, so it never overlaps the headline or CTA.
+  const deviceYMotion = useTransform(
+    scrollYProgress,
+    [0, 0.18, 0.34, 0.7, 0.88, 1],
+    ['0vh', '0vh', '0vh', '0vh', '-4vh', '-4vh'],
+  )
+  const compactDeviceY = useTransform(
+    scrollYProgress,
+    [0, 0.26, 0.46, 0.72, 0.9, 1],
+    ['0vh', '0vh', '-26vh', '-26vh', '-38vh', '-38vh'],
+  )
+  const compactDeviceScale = useTransform(
+    scrollYProgress,
+    [0, 0.26, 0.46, 0.72, 0.9, 1],
+    [1, 1, 0.46, 0.46, 0.36, 0.36],
+  )
+  const compactDeviceOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.48, 0.78, 0.92, 1],
+    [1, 1, 0.22, 0.22, 0.12, 0.12],
+  )
   const deviceX = isCompact ? '-50%' : deviceXMotion
+  const deviceY = isCompact ? compactDeviceY : deviceYMotion
+  const deviceScrollScale = isCompact ? compactDeviceScale : 1
+  const deviceOpacity = isCompact ? compactDeviceOpacity : 1
   return (
     <main onMouseMove={handleMouseMove}>
       <AnimatePresence>{loading && <LoadingScreen />}</AnimatePresence>
@@ -389,7 +414,7 @@ function App() {
             Webagentur für moderne Unternehmen
           </motion.div>
           {!loading && (
-            <motion.div className="device-motion-frame" style={{ x: deviceX }}>
+            <motion.div className="device-motion-frame" style={{ x: deviceX, y: deviceY, scale: deviceScrollScale, opacity: deviceOpacity }}>
               <motion.div
                 className={`laptop-wrap ${entryStarted ? `device-${deviceMode}` : 'device-entry'}`}
                 initial={{ opacity: 0, scale: 0.3 }}

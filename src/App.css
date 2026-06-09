@@ -282,7 +282,7 @@ p {
   aspect-ratio: 1042 / 1638;
   isolation: isolate;
   transform-style: preserve-3d;
-  animation: phoneIdle 4s ease-in-out 1.4s infinite;
+  animation: none;
   filter:
     drop-shadow(0 78px 150px rgba(0, 0, 0, 0.74))
     drop-shadow(0 0 84px rgba(101, 170, 255, 0.28));
@@ -844,6 +844,10 @@ form button {
 }
 
 @media (max-width: 980px) {
+  .intro {
+    height: 460vh;
+  }
+
   .nav-pill {
     left: 18px;
     right: 18px;
@@ -862,33 +866,38 @@ form button {
   }
 
   .device-motion-frame {
-    top: 30vh;
+    top: 38vh;
     left: 50%;
-    width: 58vw;
-    max-width: 270px;
-    z-index: 1;
+    width: min(52vw, 230px);
+    max-width: none;
+    z-index: 2;
   }
 
   .laptop-wrap {
-    opacity: 0.64;
+    opacity: 1;
+    --phone-rotate: 0deg;
   }
 
   .headline-panel {
-    top: 15vh;
+    top: 18vh;
+    left: 20px;
     width: calc(100vw - 40px);
     z-index: 4;
+    text-shadow: 0 14px 42px rgba(0, 0, 0, 0.72);
   }
 
   .hero-bottom {
+    left: 20px;
+    bottom: 7vh;
     width: calc(100vw - 40px);
     z-index: 4;
   }
 
   .hero-stage::before {
-    z-index: 3;
+    z-index: 1;
     background:
-      radial-gradient(ellipse 95% 55% at 45% 34%, rgba(0, 0, 0, 0.72) 0%, transparent 72%),
-      linear-gradient(180deg, rgba(5, 6, 7, 0.2) 0%, rgba(5, 6, 7, 0.42) 100%);
+      radial-gradient(ellipse 105% 62% at 50% 33%, rgba(0, 0, 0, 0.62) 0%, transparent 72%),
+      linear-gradient(180deg, rgba(5, 6, 7, 0.18) 0%, rgba(5, 6, 7, 0.5) 100%);
   }
 
   .intro-label {
@@ -915,25 +924,43 @@ form button {
   .service-list article p {
     grid-column: auto;
   }
+
+  .proof article {
+    min-height: 180px;
+  }
+
+  .proof strong {
+    font-size: clamp(54px, 12vw, 92px);
+  }
 }
 
 @media (max-width: 660px) {
   h1 {
-    font-size: clamp(46px, 15vw, 72px);
+    font-size: clamp(38px, 11.2vw, 54px);
   }
 
   .device-motion-frame {
-    top: 33vh;
-    width: 58vw;
-    max-width: 240px;
+    top: 40vh;
+    width: min(54vw, 200px);
+  }
+
+  .headline-panel {
+    top: 18vh;
+  }
+
+  .headline-panel span {
+    margin-bottom: 12px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
   }
 
   .hero-bottom p {
-    max-width: 300px;
+    max-width: 330px;
   }
 
   .hero-actions {
     max-width: 340px;
+    gap: 10px;
   }
 
   .button,
