@@ -312,7 +312,7 @@ function App() {
   const { scrollYProgress } = useScroll({ target: introRef, offset: ['start start', 'end end'] })
 
   useEffect(() => {
-    const query = window.matchMedia('(max-width: 980px)')
+    const query = window.matchMedia('(max-width: 1180px)')
     const update = () => setIsCompact(query.matches)
     update()
     query.addEventListener('change', update)
@@ -361,7 +361,7 @@ function App() {
 
   const introOpacity = useTransform(scrollYProgress, [0, 0.1, 0.16], [1, 1, 0])
   const headlineOpacityDesktop = useTransform(scrollYProgress, [0.42, 0.5, 0.64, 0.72], [0, 1, 1, 0])
-  const headlineOpacityMobile = useTransform(scrollYProgress, [0.58, 0.68, 0.78, 0.86], [0, 1, 1, 0])
+  const headlineOpacityMobile = useTransform(scrollYProgress, [0.52, 0.62, 0.8, 0.9], [0, 1, 1, 0])
   const bottomOpacityDesktop = useTransform(scrollYProgress, [0.76, 0.84, 1], [0, 1, 1])
   const bottomOpacityMobile = useTransform(scrollYProgress, [0.9, 0.96, 1], [0, 1, 1])
   const headlineOpacity = isCompact ? headlineOpacityMobile : headlineOpacityDesktop
@@ -378,18 +378,18 @@ function App() {
   )
   const compactDeviceY = useTransform(
     scrollYProgress,
-    [0, 0.26, 0.46, 0.72, 0.9, 1],
-    ['0vh', '0vh', '-26vh', '-26vh', '-38vh', '-38vh'],
+    [0, 0.24, 0.44, 0.74, 0.9, 1],
+    ['0vh', '0vh', '-20vh', '-20vh', '-32vh', '-32vh'],
   )
   const compactDeviceScale = useTransform(
     scrollYProgress,
-    [0, 0.26, 0.46, 0.72, 0.9, 1],
-    [1, 1, 0.46, 0.46, 0.36, 0.36],
+    [0, 0.24, 0.44, 0.74, 0.9, 1],
+    [1, 1, 0.4, 0.4, 0.32, 0.32],
   )
   const compactDeviceOpacity = useTransform(
     scrollYProgress,
-    [0, 0.3, 0.48, 0.78, 0.92, 1],
-    [1, 1, 0.22, 0.22, 0.12, 0.12],
+    [0, 0.28, 0.46, 0.78, 0.92, 1],
+    [1, 1, 0.08, 0.08, 0.04, 0.04],
   )
   const deviceX = isCompact ? '-50%' : deviceXMotion
   const deviceY = isCompact ? compactDeviceY : deviceYMotion

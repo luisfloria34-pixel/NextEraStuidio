@@ -172,7 +172,7 @@ p {
 }
 
 .intro {
-  height: 360vh;
+  height: 380vh;
   position: relative;
 }
 
@@ -230,8 +230,9 @@ p {
 }
 
 .intro-label {
-  top: 17vh;
+  top: 18vh;
   left: 50%;
+  z-index: 4;
   color: var(--blue);
   font-size: 11px;
   font-weight: 900;
@@ -243,8 +244,8 @@ p {
 
 .device-motion-frame {
   left: 50%;
-  top: 14vh;
-  width: min(420px, 31vw);
+  top: 24vh;
+  width: clamp(220px, 23vw, 340px);
   transform-origin: center center;
 }
 
@@ -310,9 +311,10 @@ p {
 }
 
 .headline-panel {
-  top: 22vh;
+  top: 24vh;
   left: clamp(24px, 5vw, 86px);
-  width: min(740px, calc(100vw - 48px));
+  width: min(660px, calc(100vw - 48px));
+  z-index: 5;
 }
 
 .headline-panel span,
@@ -331,6 +333,7 @@ p {
   left: clamp(24px, 5vw, 86px);
   bottom: 10vh;
   width: min(700px, calc(100vw - 48px));
+  z-index: 5;
 }
 
 .hero-bottom p {
@@ -843,7 +846,7 @@ form button {
   cursor: pointer;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1180px) {
   .intro {
     height: 460vh;
   }
@@ -866,9 +869,9 @@ form button {
   }
 
   .device-motion-frame {
-    top: 38vh;
+    top: 34vh;
     left: 50%;
-    width: min(52vw, 230px);
+    width: clamp(160px, 34vw, 260px);
     max-width: none;
     z-index: 2;
   }
@@ -879,10 +882,10 @@ form button {
   }
 
   .headline-panel {
-    top: 18vh;
+    top: 20vh;
     left: 20px;
     width: calc(100vw - 40px);
-    z-index: 4;
+    z-index: 6;
     text-shadow: 0 14px 42px rgba(0, 0, 0, 0.72);
   }
 
@@ -890,7 +893,7 @@ form button {
     left: 20px;
     bottom: 7vh;
     width: calc(100vw - 40px);
-    z-index: 4;
+    z-index: 6;
   }
 
   .hero-stage::before {
@@ -901,7 +904,7 @@ form button {
   }
 
   .intro-label {
-    z-index: 4;
+    z-index: 6;
   }
 
   .proof,
@@ -940,8 +943,8 @@ form button {
   }
 
   .device-motion-frame {
-    top: 40vh;
-    width: min(54vw, 200px);
+    top: 36vh;
+    width: clamp(150px, 42vw, 190px);
   }
 
   .headline-panel {
