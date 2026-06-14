@@ -230,7 +230,7 @@ p {
 }
 
 .intro-label {
-  top: 18vh;
+  top: 17vh;
   left: 50%;
   z-index: 4;
   color: var(--blue);
@@ -244,8 +244,8 @@ p {
 
 .device-motion-frame {
   left: 50%;
-  top: 24vh;
-  width: clamp(220px, 23vw, 340px);
+  top: 29vh;
+  width: clamp(190px, 19vw, 282px);
   transform-origin: center center;
 }
 
@@ -313,7 +313,7 @@ p {
 .headline-panel {
   top: 24vh;
   left: clamp(24px, 5vw, 86px);
-  width: min(660px, calc(100vw - 48px));
+  width: min(620px, calc(100vw - 48px));
   z-index: 5;
 }
 
@@ -396,6 +396,7 @@ form button {
 }
 
 .proof article {
+  min-width: 0;
   min-height: 270px;
   display: flex;
   flex-direction: column;
@@ -407,7 +408,8 @@ form button {
 }
 
 .proof strong {
-  font-size: clamp(58px, 7vw, 118px);
+  max-width: 100%;
+  font-size: clamp(48px, 5.8vw, 94px);
   line-height: 0.9;
   white-space: nowrap;
 }
@@ -752,8 +754,8 @@ form button {
 .contact {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 0.82fr 1fr;
-  gap: clamp(34px, 7vw, 96px);
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 72px);
   align-items: center;
   overflow: hidden;
   background: #050607;
@@ -787,6 +789,7 @@ form button {
 form {
   position: relative;
   z-index: 2;
+  min-width: 0;
 }
 
 .contact-copy p {
@@ -802,6 +805,9 @@ form {
 form {
   display: grid;
   gap: 14px;
+  width: 100%;
+  max-width: 720px;
+  justify-self: end;
   padding: 26px;
   border: 1px solid var(--stroke);
   border-radius: 32px;
@@ -846,6 +852,40 @@ form button {
   cursor: pointer;
 }
 
+@media (max-width: 1400px) {
+  .device-motion-frame {
+    top: 30vh;
+    width: clamp(176px, 18vw, 248px);
+  }
+
+  .headline-panel {
+    width: min(560px, calc(100vw - 48px));
+  }
+
+  .proof {
+    gap: 14px;
+    padding-inline: clamp(22px, 4vw, 64px);
+  }
+
+  .proof article {
+    min-height: 220px;
+    padding: clamp(24px, 3vw, 38px);
+  }
+
+  .proof strong {
+    font-size: clamp(46px, 5.4vw, 78px);
+  }
+
+  .contact {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 54px);
+  }
+
+  form {
+    max-width: 640px;
+  }
+}
+
 @media (max-width: 1180px) {
   .intro {
     height: 460vh;
@@ -869,9 +909,9 @@ form button {
   }
 
   .device-motion-frame {
-    top: 34vh;
+    top: 38vh;
     left: 50%;
-    width: clamp(160px, 34vw, 260px);
+    width: clamp(140px, 28vw, 210px);
     max-width: none;
     z-index: 2;
   }
@@ -933,7 +973,12 @@ form button {
   }
 
   .proof strong {
-    font-size: clamp(54px, 12vw, 92px);
+    font-size: clamp(46px, 11vw, 78px);
+  }
+
+  form {
+    max-width: none;
+    justify-self: stretch;
   }
 }
 
@@ -943,8 +988,8 @@ form button {
   }
 
   .device-motion-frame {
-    top: 36vh;
-    width: clamp(150px, 42vw, 190px);
+    top: 42vh;
+    width: clamp(124px, 38vw, 168px);
   }
 
   .headline-panel {
@@ -973,6 +1018,10 @@ form button {
 
   .proof article {
     min-height: 150px;
+  }
+
+  .proof strong {
+    font-size: clamp(40px, 14vw, 66px);
   }
 
   .image-card,
