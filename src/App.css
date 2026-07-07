@@ -273,6 +273,12 @@ p {
   top: 29vh;
   width: clamp(190px, 19vw, 282px);
   transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.device-motion-inner {
+  width: 100%;
+  will-change: transform;
 }
 
 .laptop-wrap {

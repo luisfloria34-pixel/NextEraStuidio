@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
+import { AnimatePresence, motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import {
   ArrowRight,
   BriefcaseBusiness,
@@ -384,6 +384,8 @@ function App() {
   const [isCompact, setIsCompact] = useState(false)
   const introRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: introRef, offset: ['start start', 'end end'] })
+  // Wheel events land in discrete steps; the spring turns them into a glide.
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 110, damping: 28, mass: 0.6, restDelta: 0.0005 })
 
   useEffect(() => {
     const query = window.matchMedia('(max-width: 1180px)')
@@ -446,32 +448,41 @@ function App() {
   const bottomOpacityMobile = useTransform(scrollYProgress, [0.9, 0.96, 1], [0, 1, 1])
   const headlineOpacity = isCompact ? headlineOpacityMobile : headlineOpacityDesktop
   const bottomOpacity = isCompact ? bottomOpacityMobile : bottomOpacityDesktop
-  const deviceXMotion = useTransform(
-    scrollYProgress,
+  // The horizontal move is split across two nested motion divs so each value
+  // interpolates in a single unit. Mixing '%' and 'vw' in one transform makes
+  // Framer Motion snap between keyframes instead of gliding.
+  const deviceXCenter = useTransform(
+    smoothProgress,
     [0, 0.18, 0.34, 0.7, 0.88, 1],
-    ['-50%', '-50%', '14vw', '14vw', '-50%', '-50%'],
+    ['-50%', '-50%', '0%', '0%', '-50%', '-50%'],
+  )
+  const deviceXShiftMotion = useTransform(
+    smoothProgress,
+    [0, 0.18, 0.34, 0.7, 0.88, 1],
+    ['0vw', '0vw', '14vw', '14vw', '0vw', '0vw'],
   )
   const deviceYMotion = useTransform(
-    scrollYProgress,
+    smoothProgress,
     [0, 0.18, 0.34, 0.7, 0.88, 1],
     ['0vh', '0vh', '0vh', '0vh', '-4vh', '-4vh'],
   )
   const compactDeviceY = useTransform(
-    scrollYProgress,
+    smoothProgress,
     [0, 0.24, 0.44, 0.74, 0.9, 1],
     ['0vh', '0vh', '-20vh', '-20vh', '-32vh', '-32vh'],
   )
   const compactDeviceScale = useTransform(
-    scrollYProgress,
+    smoothProgress,
     [0, 0.24, 0.44, 0.74, 0.9, 1],
     [1, 1, 0.4, 0.4, 0.32, 0.32],
   )
   const compactDeviceOpacity = useTransform(
-    scrollYProgress,
+    smoothProgress,
     [0, 0.28, 0.46, 0.78, 0.92, 1],
     [1, 1, 0.08, 0.08, 0.04, 0.04],
   )
-  const deviceX = isCompact ? '-50%' : deviceXMotion
+  const deviceX = isCompact ? '-50%' : deviceXCenter
+  const deviceXShift = isCompact ? '0vw' : deviceXShiftMotion
   const deviceY = isCompact ? compactDeviceY : deviceYMotion
   const deviceScrollScale = isCompact ? compactDeviceScale : 1
   const deviceOpacity = isCompact ? compactDeviceOpacity : 1
@@ -495,13 +506,15 @@ function App() {
           </motion.div>
           {!loading && (
             <motion.div className="device-motion-frame" style={{ x: deviceX, y: deviceY, scale: deviceScrollScale, opacity: deviceOpacity }}>
-              <motion.div
-                className={`laptop-wrap ${entryStarted ? `device-${deviceMode}` : 'device-entry'}`}
-                initial={{ opacity: 0, scale: 0.3 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1.1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <HeroDevice />
+              <motion.div className="device-motion-inner" style={{ x: deviceXShift }}>
+                <motion.div
+                  className={`laptop-wrap ${entryStarted ? `device-${deviceMode}` : 'device-entry'}`}
+                  initial={{ opacity: 0, scale: 0.3 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1.1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <HeroDevice />
+                </motion.div>
               </motion.div>
             </motion.div>
           )}
