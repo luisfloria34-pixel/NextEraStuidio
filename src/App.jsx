@@ -83,7 +83,7 @@ const accounts = [
 
 const team = [
   ['Luis Florian', 'Developer & CTO', 'Website-Aufbau, Designsysteme und Umsetzung.'],
-  ['Mario Augusto', 'Sales & Operations', 'Kundengewinnung, Beratung und Projektablauf.'],
+  ['Jason Rikowsky', 'Sales & Operations', 'Kundengewinnung, Beratung und Projektablauf.'],
 ]
 
 const steps = [
