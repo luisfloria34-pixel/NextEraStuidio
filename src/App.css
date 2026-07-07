@@ -45,6 +45,26 @@ a {
   text-decoration: none;
 }
 
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 h1,
 h2,
 h3,
@@ -146,6 +166,12 @@ p {
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+.nav-pill a:not(.nav-logo):not(.nav-cta):hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .nav-logo {
@@ -283,21 +309,9 @@ p {
   aspect-ratio: 1042 / 1638;
   isolation: isolate;
   transform-style: preserve-3d;
-  animation: none;
   filter:
     drop-shadow(0 78px 150px rgba(0, 0, 0, 0.74))
     drop-shadow(0 0 84px rgba(101, 170, 255, 0.28));
-}
-
-@keyframes phoneIdle {
-  0%,
-  100% {
-    transform: translateY(-8px) rotate(-2deg);
-  }
-
-  50% {
-    transform: translateY(8px) rotate(1deg);
-  }
 }
 
 .hero-device img {
@@ -365,15 +379,37 @@ form button,
   text-transform: uppercase;
 }
 
+.button,
+form button,
+.phone-link {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
+}
+
+.button:hover,
+form button:hover,
+.phone-link:hover {
+  transform: translateY(-2px);
+}
+
 .primary,
 form button {
   color: #050607;
   background: #f7f8fb;
 }
 
+.primary:hover,
+form button:hover {
+  background: #fff;
+}
+
 .ghost,
 .phone-link {
   background: rgba(255, 255, 255, 0.055);
+}
+
+.ghost:hover,
+.phone-link:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .proof,
@@ -604,6 +640,12 @@ form button {
   color: #fff;
   background: rgba(255, 255, 255, 0.06);
   cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.slider-controls button:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(1.06);
 }
 
 .slider-dots {
@@ -617,6 +659,7 @@ form button {
   padding: 0;
   border-color: transparent;
   background: rgba(255, 255, 255, 0.22);
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.35s ease;
 }
 
 .slider-dots button.active {
@@ -771,12 +814,18 @@ form button {
   opacity: 0.08;
 }
 
+.marquee-track {
+  display: inline-flex;
+  animation: marquee 34s linear infinite;
+  will-change: transform;
+}
+
 .marquee span {
   display: inline-block;
-  min-width: 200%;
+  flex: 0 0 auto;
   font-size: clamp(70px, 13vw, 180px);
   font-weight: 900;
-  animation: marquee 34s linear infinite;
+  white-space: nowrap;
 }
 
 @keyframes marquee {

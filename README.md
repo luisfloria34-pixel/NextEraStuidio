@@ -19,7 +19,7 @@ https://next-era-stuidio.vercel.app
 - React
 - Vite
 - Framer Motion
-- Three.js / Canvas Effects
+- Canvas Particle Effects
 - Lucide Icons
 - Vercel Deployment
 

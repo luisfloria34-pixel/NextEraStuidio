@@ -10,7 +10,6 @@ import {
   Mail,
   MapPinned,
   Phone,
-  Sparkles,
   UserRound,
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
@@ -19,6 +18,21 @@ import './App.css'
 const links = {
   phone: '+491234567890',
   mail: 'hello@nextera.studio',
+}
+
+// No backend yet, so the form hands the request to the visitor's mail client.
+function handleContactSubmit(event) {
+  event.preventDefault()
+  const data = new FormData(event.currentTarget)
+  const subject = `Website-Anfrage von ${data.get('name')}`
+  const body = [
+    `Name: ${data.get('name')}`,
+    `Firma: ${data.get('company') || '-'}`,
+    `Kontakt: ${data.get('contact')}`,
+    '',
+    `${data.get('message')}`,
+  ].join('\n')
+  window.location.href = `mailto:${links.mail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 }
 
 const stats = [
@@ -115,14 +129,32 @@ function ParticleCanvas() {
     const context = canvas.getContext('2d')
     const palette = ['#4f7fff', '#6ea8fe', '#3a7bd5', '#80d0ff']
     const mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999 }
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     let width = 0
     let height = 0
     let dpr = 1
     let frame = 0
+    let running = false
     let particles = []
 
+    // Glowing dots are pre-rendered once per palette color; blitting sprites
+    // replaces per-particle shadowBlur, which cannot sustain 60fps at this count.
+    const sprites = palette.map((color) => {
+      const sprite = document.createElement('canvas')
+      const radius = 8
+      sprite.width = sprite.height = radius * 2
+      const spriteContext = sprite.getContext('2d')
+      const glow = spriteContext.createRadialGradient(radius, radius, 0, radius, radius, radius)
+      glow.addColorStop(0, color)
+      glow.addColorStop(0.35, `${color}66`)
+      glow.addColorStop(1, `${color}00`)
+      spriteContext.fillStyle = glow
+      spriteContext.fillRect(0, 0, radius * 2, radius * 2)
+      return sprite
+    })
+
     const createParticles = () => {
-      const count = window.innerWidth <= 768 ? 3000 : 10500
+      const count = window.innerWidth <= 768 ? 1400 : 4200
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
@@ -133,6 +165,7 @@ function ParticleCanvas() {
         phase: Math.random() * Math.PI * 2,
         speed: 0.35 + Math.random() * 0.75,
         size: 0.55 + Math.random() * 1.35,
+        sprite: sprites[Math.floor(Math.random() * sprites.length)],
         color: palette[Math.floor(Math.random() * palette.length)],
       }))
     }
@@ -190,16 +223,17 @@ function ParticleCanvas() {
         particle.x += particle.vx
         particle.y += particle.vy
 
-        context.beginPath()
-        context.fillStyle = particle.color
-        context.globalAlpha = 0.22 + Math.sin(time * 0.001 + index) * 0.08
-        context.shadowColor = particle.color
-        context.shadowBlur = 9
-        context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        context.fill()
+        const drawSize = particle.size * 7
+        context.globalAlpha = 0.26 + Math.sin(time * 0.001 + index) * 0.08
+        context.drawImage(
+          particle.sprite,
+          particle.x - drawSize / 2,
+          particle.y - drawSize / 2,
+          drawSize,
+          drawSize,
+        )
       })
 
-      context.shadowBlur = 0
       context.lineWidth = 0.45
       for (let i = 0; i < particles.length; i += 18) {
         const a = particles[i]
@@ -221,16 +255,48 @@ function ParticleCanvas() {
       context.globalCompositeOperation = 'source-over'
     }
 
+    let heroVisible = true
+
+    const syncRunning = () => {
+      const shouldRun = heroVisible && !document.hidden && !reducedMotion
+      if (shouldRun && !running) {
+        running = true
+        frame = requestAnimationFrame(draw)
+      } else if (!shouldRun && running) {
+        running = false
+        cancelAnimationFrame(frame)
+      }
+    }
+
+    // Only animate while the hero is actually on screen; the canvas otherwise
+    // keeps burning CPU behind every section below it. The canvas itself is
+    // position: fixed, so observe the scrolling hero stage around it instead.
+    const visibility = new IntersectionObserver(([entry]) => {
+      heroVisible = entry.isIntersecting
+      syncRunning()
+    })
+
+    const onVisibilityChange = () => syncRunning()
+
     resize()
     window.addEventListener('resize', resize)
-    window.addEventListener('mousemove', onMouseMove)
-    window.addEventListener('mouseleave', onMouseLeave)
-    frame = requestAnimationFrame(draw)
-    return () => {
+    window.addEventListener('pointermove', onMouseMove)
+    document.addEventListener('pointerleave', onMouseLeave)
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    if (reducedMotion) {
+      draw(0)
       cancelAnimationFrame(frame)
+    } else {
+      visibility.observe(canvas.parentElement)
+    }
+    return () => {
+      running = false
+      cancelAnimationFrame(frame)
+      visibility.disconnect()
       window.removeEventListener('resize', resize)
-      window.removeEventListener('mousemove', onMouseMove)
-      window.removeEventListener('mouseleave', onMouseLeave)
+      window.removeEventListener('pointermove', onMouseMove)
+      document.removeEventListener('pointerleave', onMouseLeave)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
     }
   }, [])
 
@@ -247,21 +313,29 @@ function HeroDevice() {
 
 function ClientSlideshow() {
   const [active, setActive] = useState(0)
+  const [paused, setPaused] = useState(false)
   const current = clients[active]
 
+  // Keyed on `active` so manual navigation restarts the full delay instead of
+  // the slideshow jumping right after a click.
   useEffect(() => {
+    if (paused) return undefined
     const timer = setInterval(() => {
       setActive((index) => (index + 1) % clients.length)
     }, 3800)
     return () => clearInterval(timer)
-  }, [])
+  }, [active, paused])
 
   const changeSlide = (direction) => {
     setActive((index) => (index + direction + clients.length) % clients.length)
   }
 
   return (
-    <div className="client-slider">
+    <div
+      className="client-slider"
+      onPointerEnter={() => setPaused(true)}
+      onPointerLeave={() => setPaused(false)}
+    >
       <AnimatePresence mode="wait">
         <motion.article
           className="client-feature"
@@ -271,7 +345,7 @@ function ClientSlideshow() {
           exit={{ opacity: 0, x: -42, scale: 0.98 }}
           transition={{ duration: 0.55, ease: 'easeOut' }}
         >
-          <img src={current[2]} alt="" />
+          <img src={current[2]} alt={`Website-Vorschau: ${current[0]}`} loading="lazy" decoding="async" />
           <div>
             <span>{current[1]}</span>
             <strong>{current[0]}</strong>
@@ -354,9 +428,15 @@ function App() {
     return () => observer.disconnect()
   }, [])
 
+  const pointerFrame = useRef(0)
   const handleMouseMove = (event) => {
-    document.documentElement.style.setProperty('--mx', `${event.clientX}px`)
-    document.documentElement.style.setProperty('--my', `${event.clientY}px`)
+    const { clientX, clientY } = event
+    // Batch the CSS-variable writes to one style recalc per frame.
+    cancelAnimationFrame(pointerFrame.current)
+    pointerFrame.current = requestAnimationFrame(() => {
+      document.documentElement.style.setProperty('--mx', `${clientX}px`)
+      document.documentElement.style.setProperty('--my', `${clientY}px`)
+    })
   }
 
   const introOpacity = useTransform(scrollYProgress, [0, 0.1, 0.16], [1, 1, 0])
@@ -466,7 +546,7 @@ function App() {
         <div className="portfolio-grid">
           {portfolio.map(([title, tag, image], index) => (
             <motion.article key={title} className="image-card" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}>
-              <img src={image} alt="" />
+              <img src={image} alt={title} loading="lazy" decoding="async" />
               <div><span>{tag}</span><h3>{title}</h3></div>
             </motion.article>
           ))}
@@ -520,7 +600,12 @@ function App() {
 
       <section id="contact" className="contact">
         <PixelField />
-        <div className="marquee"><span>BUILT FOR TOMORROW - BUILT FOR TOMORROW - BUILT FOR TOMORROW - </span></div>
+        <div className="marquee" aria-hidden="true">
+          <div className="marquee-track">
+            <span>BUILT FOR TOMORROW - BUILT FOR TOMORROW - BUILT FOR TOMORROW - </span>
+            <span>BUILT FOR TOMORROW - BUILT FOR TOMORROW - BUILT FOR TOMORROW - </span>
+          </div>
+        </div>
         <div className="contact-copy">
           <span>Kontakt</span>
           <h2>Schick uns dein Projekt.</h2>
@@ -528,12 +613,12 @@ function App() {
           <a className="phone-link" href={`tel:${links.phone}`}><Phone size={18} /> Direkt anrufen</a>
           <a className="phone-link" href={`mailto:${links.mail}`}><Mail size={18} /> E-Mail senden</a>
         </div>
-        <form>
-          <label>Name<input name="name" placeholder="Max Mustermann" /></label>
-          <label>Firma<input name="company" placeholder="Dein Unternehmen" /></label>
-          <label>Telefon oder E-Mail<input name="contact" placeholder="+49 ... oder mail@..." /></label>
-          <label>Was brauchst du?<textarea name="message" placeholder="Neue Website, Relaunch, Hosting, SEO ..." /></label>
-          <button type="button">Anfrage senden <ArrowRight size={17} /></button>
+        <form onSubmit={handleContactSubmit}>
+          <label>Name<input name="name" placeholder="Max Mustermann" autoComplete="name" required /></label>
+          <label>Firma<input name="company" placeholder="Dein Unternehmen" autoComplete="organization" /></label>
+          <label>Telefon oder E-Mail<input name="contact" placeholder="+49 ... oder mail@..." required /></label>
+          <label>Was brauchst du?<textarea name="message" placeholder="Neue Website, Relaunch, Hosting, SEO ..." required /></label>
+          <button type="submit">Anfrage senden <ArrowRight size={17} /></button>
         </form>
       </section>
     </main>
